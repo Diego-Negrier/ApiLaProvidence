@@ -1,0 +1,133 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block Commandes %}
+
+<div class="container-commande">
+  <h1 class="commande-titre">Commandes</h1>
+
+<!-- Affichage des commandes avec pagination -->
+{% for commande in commandes %}
+
+  <div class="commande-card">
+    <!-- En-tête de la carte -->
+    <div class="commande-header">
+      <h2>Commande #{{ commande.id }} <br>
+        
+      <!-- Affichage du statut et de l'avancement -->
+      <p class="statut-label">
+        Status: 
+        <strong class="statut">
+          {{ commande.statut }}
+        </strong>
+      </p>
+
+      <p class="avancement-label">
+        Avancement: 
+        <strong class="avancement 
+          {% if commande.avancement == 100 %}
+            avancement-complete
+          {% else %}
+            avancement-incomplete
+          {% endif %}">
+          {{ commande.avancement |floatformat:2}}%
+        </strong>
+      </p>
+  
+      </h2>
+      <p>Date de commande: {{ commande.date_commande }}</p>
+      <p>Client: {{ commande.client }}</p>
+      <p><strong>Total: </strong>{{ commande.total|floatformat:2 }} €</p>
+    </div>
+
+    <!-- Détails des produits dans la commande -->
+    <table class="commande-table">
+      <thead>
+        <tr>
+          <th style="width:10%">Image</th>
+          <th>Produit</th>
+          <th>Quantité</th>
+          <th>Prix Unitaire</th>
+          <th>Fournisseur</th>
+
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if is_authenticated %}
+        {% if is_admin or is_fournisseur %}
+            {% for ligne in commande.produits %}
+            <tr>
+              <td class="produit-image">
+                  <img src="{{ ligne.image }}" alt="{{ ligne.produit }}" width="50px" height="50px"/>
+              </td>
+              <td>{{ ligne.produit }}</td>
+              <td>{{ ligne.quantite }}</td>
+              <td>{{ ligne.prix|floatformat:2 }} €</td>
+              <td>{{ ligne.fournisseur }}</td>
+              <td>
+                  <form method="POST" class="statut-form">
+                      {% csrf_token %}
+                      <input type="hidden" name="ligne_panier_id" value="{{ ligne.ligne_panier_id }}">
+                      <select name="statut" class="statut-select">
+                          {% for statut_value, statut_label in statut_choices %}
+                              <option value="{{ statut_value }}" {% if ligne.statut == statut_value %}selected{% endif %}>
+                                  {{ statut_label }}
+                              </option>
+                          {% endfor %}
+                      </select>
+                      <button type="submit" class="validationStatut">
+                          <i class="fas fa-check-circle"></i> Mettre à jour
+                      </button>
+                  </form>
+              </td>
+          </tr>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+      </tbody>
+    </table>
+        <!-- Affichage des produits en liste (pour petits écrans) -->
+    <div class="commande-ligne">
+      {% if is_authenticated %}
+        {% if is_admin or is_fournisseur %}
+          {% for ligne in commande.produits %}
+          <div class="commande-produit">
+            <div class="commande-produit-image">
+              <img src="{{ ligne.image }}" alt="{{ ligne.produit }}" />
+            </div>
+            <div class="commande-details">
+              <ul>
+                <li><strong>Produit:</strong> {{ ligne.produit }}</li>
+                <li><strong>Quantité:</strong> {{ ligne.quantite }}</li>
+                <li><strong>Prix Unitaire:</strong> {{ ligne.prix|floatformat:2 }} €</li>
+                <li><strong>Fournisseur:</strong> {{ ligne.fournisseur }}</li>
+                <li>
+                  <form method="POST" class="statut-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="ligne_panier_id" value="{{ ligne.ligne_panier_id }}">
+                    <select name="statut" class="statut-select">
+                      {% for statut_value, statut_label in statut_choices %}
+                      <option value="{{ statut_value }}" {% if ligne.statut == statut_value %}selected{% endif %}>
+                        {{ statut_label }}
+                      </option>
+                      {% endfor %}
+                      
+                    </select>
+                    <button type="submit" class="validationStatut">
+                      <i class="fas fa-check-circle"></i> Mettre à jour
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+{% endfor %}
+</div>
+{% endblock %}

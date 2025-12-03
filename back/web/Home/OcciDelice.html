@@ -1,0 +1,56 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block Occidelice%}
+
+
+<div class="Home">
+  <div class="welcome-text">
+      <h1>Bienvenue dans l'entrepôt d'OcciDélice</h1>
+      <p>
+          Cette application est spécialement conçue pour les fournisseurs d'OcciDélice. 
+          Elle vous permet de gérer efficacement vos produits, suivre les commandes qui vous sont adressées 
+          et tenir à jour vos informations personnelles et professionnelles.
+      </p>
+
+      <!-- Section pour le catalogue -->
+      <h2>Gestion de vos Produits</h2>
+      <p>
+          Accédez à votre catalogue pour ajouter, modifier ou supprimer vos produits. 
+          Assurez-vous que toutes les informations, comme les prix, les descriptions et les stocks, 
+          sont correctement mises à jour pour offrir une meilleure visibilité à nos clients.
+      </p>
+      <button onclick="redirectToCatalog()">
+          <i class="fas fa-box-open"></i> Voir le Catalogue
+      </button>
+      {% if user.is_authenticated %}
+
+      <!-- Section pour les commandes -->
+      <h2>Suivi de vos Commandes</h2>
+      <p>
+          Consultez les commandes passées par nos clients pour vos produits. 
+          Vous pourrez y trouver les détails nécessaires, comme les quantités, les dates de commande, 
+          et les informations sur la livraison. 
+          Suivez vos commandes pour une gestion efficace et rapide.
+      </p>
+      <button onclick="redirectToCommande()">
+          <i class="fa-solid fa-shopping-cart"></i> Voir les Commandes
+      </button>
+
+      <!-- Section pour les informations du fournisseur -->
+      <h2>Vos Informations Personnelles et Professionnelles</h2>
+      <p>
+          Accédez à vos informations pour les mettre à jour ou vérifier leur exactitude. 
+          Cela inclut vos coordonnées, vos informations bancaires pour les paiements, 
+          ainsi que tout autre détail nécessaire pour assurer une communication fluide avec OcciDélice.
+      </p>
+      <button onclick="redirectToFournisseur()">
+          <i class="fa-solid fa-handshake"></i> Voir vos Informations
+      </button>
+      {% endif %}
+
+  </div>
+</div>
+
+
+{% endblock %} 

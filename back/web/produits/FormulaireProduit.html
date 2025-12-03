@@ -1,0 +1,338 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block FormulaireProduit %}
+<div class="form-wrapper">
+
+<div class="form-container">
+    <form method="POST" class="custom-form" enctype="multipart/form-data">
+        <span class="actionFormulaire">
+            {% if action == 'modifier' %}
+                <i class="fas fa-edit" 
+                    style="color:white; background-color:rgb(224, 172, 17); border-radius: 50%;padding:15px">
+                
+                </i> 
+            {% elif action == 'ajouter' %}
+                <i class="fas fa-add" 
+                style="font-size:12px;color:white; background-color:green; border-radius: 50%;padding:5px">
+            </i>
+            {% endif %} 
+        </span>
+        {% csrf_token %}
+        <!-- Champs du formulaire -->
+        <div class="image-nom-wrapper">
+            <!-- Masquer l'input file et utiliser un bouton personnalisé -->
+            <div class="image-container-produit">
+                {% if form.instance.image %}
+                <div class="produit-image-container">
+                    <img id="preview-image" src="{{ form.instance.image.url }}" alt="Image actuelle" class="produit-image">
+                </div>
+                {% else %}
+                <p>Aucune image disponible.</p>
+                {% endif %}
+        
+                <!-- Input file pour sélectionner l'image -->
+        
+                <div class="file-input-container">
+                    <!-- Prévisualisation de l'image -->
+                    <div class="produit-image-container">
+                        <img id="image-preview" src="" alt="Prévisualisation"
+                            style="display: none; max-width: 200px; margin-top: 10px;">
+                    </div>
+                </div>
+            </div>
+            <div class="NomObject">
+                <div class="form-group">
+                    <!-- Affichage du nom -->
+                    <span>{{ form.nom }}{{ form.numero_unique }}</span>
+                    <div class="error">{{ form.nom.errors }}</div>
+                </div>
+            </div>
+
+                <!-- Sélection des logos -->
+
+            </div>
+            <h3>Modifier l'image après l'avoir chargée</h3>
+            <div class="form-group">
+        
+                <input type="file" name="image" class="form-control-file" accept="image/*" id="inputId"
+                    onchange="handleFileChange(event)">
+            </div>
+            <div class="button-container">
+   
+                <!-- Bouton de sauvegarde avec une icône -->
+                             <!-- Container pour les boutons avec flexbox -->
+                <button type="button" id="save-button"
+                    onclick="saveCroppedImage('{{ form.instance.pk|default:0|escapejs }}')" title="Sauvegarder l'image">
+                    <i class="fas fa-save"></i> <!-- Icône de sauvegarde -->
+                </button>
+    
+                <!-- Bouton pour pivoter l'image avec une icône -->
+                <button type="button" id="rotate-button" title="Pivoter l'image">
+                    <i class="fas fa-sync-alt"></i> <!-- Icône de rotation -->
+                </button>
+    
+                <!-- Bouton pour zoomer avec une icône -->
+                <button type="button" id="zoom-in" title="Zoomer">
+                    <i class="fas fa-search-plus"></i> <!-- Icône de zoom avant -->
+                </button>
+    
+                <!-- Bouton pour dézoomer avec une icône -->
+                <button type="button" id="zoom-out" title="Dézoomer">
+                    <i class="fas fa-search-minus"></i> <!-- Icône de zoom arrière -->
+                </button>
+            </div>
+
+
+    
+    <!-- Table pour afficher toutes les images (grande image et image principale) -->
+        <div class="GrandeImageDuProduit">
+            <!-- Masquer l'input file et utiliser un bouton personnalisé -->
+            <div class="custom-file">
+                {% if form.instance.grande_image %}
+                        <img src="{{ form.instance.grande_image.url }}" alt="Grande image actuelle" class="current-image" id="preview-grande-image">
+                {% else %}
+                    <img src="#" alt="Aperçu grande image" class="current-image" id="preview-grande-image" style="display:none;">
+                {% endif %}
+                <div class="form-group">
+
+                <!-- Input file pour sélectionner la grande image -->
+                <input type="file" name="grande_image" id="grande_image_input" class="custom-file-input" onchange="updateFileName('grande_image_input', 'grande_image_name'); previewImage(this, 'preview-grande-image');">
+                </div>
+
+            </div>
+            
+            <!-- Affichage dynamique du message sous l'input (nom du fichier choisi ou message par défaut) -->
+            <!-- <div id="grande_image_name" class="no-file-chosen">Aucun fichier choisi</div> -->
+        </div>
+
+        <div class="form-group">
+            <label for="logos">Logos associés :</label>
+
+            <div class="logos-container">
+                {% for logo in form.fields.logos.queryset %}
+                    <div class="logo-checkbox">
+                        <input 
+                            type="checkbox" 
+                            id="logo_{{ logo.id }}" 
+                            name="logos" 
+                            value="{{ logo.id }}" 
+                            {% if logo.id in form.initial.logos %}checked{% endif %}>
+                        <label for="logo_{{ logo.id }}">
+                            <img src="{{ logo.image.url }}" alt="{{ logo.nom }}" style="max-width: 100px; max-height: 100px;">
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Autres champs de formulaire -->
+        <div class="form-group">
+            {{ form.description }}
+        </div>
+        <div class="form-group">
+            {{ form.description_longue }}
+        </div>
+        <div class="form-group">
+            {{ form.cycle_fabrication }}
+        </div>
+        <div class="form-group">
+            {{ form.preparation }}
+        </div>
+        <div class="form-group">
+            {{ form.origine }}
+        </div>
+        <div class="form-group">
+            {{ form.date_recolte }}
+        </div>
+        <div class="form-group">
+            <label for="id_prix" class="form-label">Prix</label>
+            {{ form.prix }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_stock" class="form-label">Stock</label>
+            {{ form.stock }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_categorie" class="form-label">Catégorie</label>
+            {{ form.categorie }}
+        </div>
+        <div class="form-group">
+            <label for="id_categorie" class="form-label">Sous Catégorie</label>
+            {{ form.souscategorie }}
+        </div>
+        <div class="form-group">
+            <label for="id_poids" class="form-label">Poids (kg)</label>
+            {{ form.poids }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_fournisseur" class="form-label">Fournisseur</label>
+            {{ form.fournisseur }}
+        </div>
+
+        <button type="submit" class="submit-btn">Enregistrer</button>
+    </form>
+</div>
+</div>
+
+<!-- JavaScript pour prévisualiser les images avant de sauvegarder -->
+<script>
+    let cropper;  // Déclare le cropper à l'échelle globale
+
+    // Fonction pour gérer le changement de fichier (charge et prévisualise l'image)
+    function handleFileChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            console.log("Fichier sélectionné:", file);
+        
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Prévisualisation de l'image dans l'élément
+                const preview = document.getElementById('preview-image');  // Assurez-vous que l'élément existe
+                preview.src = e.target.result;  // Définit la source de l'image lue
+                preview.style.display = 'block';  // Affiche l'image une fois lue
+
+                // Initialiser Cropper.js
+                if (cropper) {
+                    cropper.destroy();  // Détruit toute instance précédente du cropper
+                }
+                cropper = new Cropper(preview, {
+                    aspectRatio: 4/ 6,  // Recadrage vertical pour une image en hauteur
+                    viewMode: 1,          // Mode d'affichage de l'image recadrée
+                    scalable: true,       // Permet de redimensionner l'image
+                    zoomable: true,       // Permet de zoomer sur l'image
+                    movable: true,        // Permet de déplacer l'image
+                    rotatable: true,      // Permet de pivoter l'image
+
+                    crop(event) {
+                        console.log(event.detail.x);
+                        console.log(event.detail.y);
+                        console.log(event.detail.width);
+                        console.log(event.detail.height);
+                    }
+                });
+            };
+        
+            reader.readAsDataURL(file);  // Lit l'image en base64
+        }
+    }
+// Fonction pour pivoter l'image de 90 degrés (exemple)
+function rotateImage() {
+    if (cropper) {
+        cropper.rotate(90);  // Rotation de 90 degrés
+    }
+}
+document.getElementById('zoom-in').addEventListener('click', function() {
+    if (cropper) {
+        cropper.zoom(0.1);  // Zoom avant de 10%
+    }
+});
+
+// Fonction de zoom arrière
+document.getElementById('zoom-out').addEventListener('click', function() {
+    if (cropper) {
+        cropper.zoom(-0.1);  // Zoom arrière de 10%
+    }
+});
+// Ajout d'un bouton pour pivoter l'image
+document.getElementById('rotate-button').addEventListener('click', rotateImage);
+// Fonction pour sauvegarder l'image recadrée
+function saveCroppedImage(produit_id) {
+    if (cropper) {
+        const canvas = cropper.getCroppedCanvas();  // Récupère l'image recadrée sous forme de canvas
+        canvas.toBlob(function(blob) {
+            const formData = new FormData();
+            formData.append('image', blob, 'cropped-image.jpg');  // Ajouter l'image recadrée au FormData
+
+            // Ajouter l'ID du produit pour l'envoyer avec l'image
+            formData.append('produit_id', produit_id);
+
+            // Envoyer l'image au serveur via une requête AJAX
+            fetch(`/save_image/${produit_id}/`, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Image sauvegardée avec succès !');
+            })
+            .catch(error => {
+                console.error('Erreur lors de la sauvegarde de l\'image', error);
+            });
+        });
+    } else {
+        alert('Veuillez d\'abord recadrer l\'image.');
+    }
+}
+    // Fonction pour mettre à jour le nom du fichier choisi
+    function updateFileName(inputId, displayId) {
+        var fileInput = document.getElementById(inputId);  // Récupérer l'élément input du fichier
+        var fileNameDisplay = document.getElementById(displayId);  // Récupérer l'élément pour afficher le nom du fichier
+        
+        // Vérifier si les éléments existent avant de les manipuler
+        if (fileInput && fileNameDisplay) {
+            // Vérifier si un fichier est sélectionné
+            if (fileInput.files && fileInput.files[0]) {
+                // Si un fichier est sélectionné, afficher son nom
+                fileNameDisplay.textContent = fileInput.files[0].name;
+            } else {
+                // Si aucun fichier n'est sélectionné, afficher "Aucun fichier choisi"
+                fileNameDisplay.textContent = 'Aucun fichier choisi';
+            }
+        }
+    }
+
+    // Fonction de prévisualisation de l'image
+    function previewImage(file, previewId) {
+        const preview = document.getElementById(previewId);  // Assurez-vous que cet ID existe dans ton HTML
+        const reader = new FileReader();
+        
+        reader.onload = function (e) {
+            preview.src = e.target.result;  // Définit la source de l'image lue
+            preview.style.display = 'block';  // Affiche l'image une fois lue
+        
+            // Initialiser Cropper.js sur l'image prévisualisée
+            if (cropper) {
+                cropper.destroy();  // Détruit toute instance précédente du cropper
+            }
+            
+            cropper = new Cropper(preview, {
+                aspectRatio: 4/ 6,  // Recadrage vertical pour une image en hauteur
+                viewMode: 1,          // Mode d'affichage de l'image recadrée
+                scalable: true,       // Permet de redimensionner l'image
+                zoomable: true,       // Permet de zoomer sur l'image
+                movable: true,        // Permet de déplacer l'image dans la zone de recadrage
+                crop(event) {
+                    console.log(event.detail.x);
+                    console.log(event.detail.y);
+                    console.log(event.detail.width);
+                    console.log(event.detail.height);
+                }
+            });
+        };
+        
+        reader.readAsDataURL(file);  // Lit l'image en base64
+    }
+
+    // Ajout d'événements pour les champs d'image
+    document.getElementById('grande_image_input')?.addEventListener('change', function(event) {
+        previewImage(event.target.files[0], 'preview-grande-image');
+        updateFileName('grande_image_input', 'grande_image_name');
+    });
+    
+    document.getElementById('image_input')?.addEventListener('change', function(event) {
+        previewImage(event.target.files[0], 'preview-image');
+        updateFileName('image_input', 'image_name');
+    });
+    
+    // Initialiser les messages à "Aucun fichier choisi" au chargement de la page
+    window.onload = function() {
+        updateFileName('image_input', 'image_name');  // Initialiser pour le champ image
+        updateFileName('grande_image_input', 'grande_image_name');  // Initialiser pour le champ grande image
+    };
+</script>
+
+{% endblock %}

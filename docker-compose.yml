@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  apilaprovidence:
+    container_name: apilaprovidence
+    image: apilaprovidence:latest
+    restart: unless-stopped
+    user: "0:0"
+
+    volumes:
+      - uwsgi_data:/tmp/uwsgi/
+      - /volume1/public/LaProvidence/media:/app/media
+
+    env_file:
+      - ./back/.env
+
+    environment:
+      - GUNICORN_CMD_ARGS=--bind=0.0.0.0:8007 --workers=4 --threads=2 --timeout=120
+
+
+    mem_limit: 1g
+    mem_reservation: 512m
+
+    networks:
+      - proxy
+
+    labels:
+      # ===== Traefik Activation =====
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+
+      # ===== HTTP → HTTPS Redirect =====
+      - "traefik.http.routers.apilaprovidence-http.rule=Host(`api-laprovidence.data-worlds.com`)"
+      - "traefik.http.routers.apilaprovidence-http.entrypoints=web"
+      - "traefik.http.routers.apilaprovidence-http.middlewares=apilaprovidence-redirect-https"
+
+      # ===== HTTPS Router =====
+      - "traefik.http.routers.apilaprovidence-https.rule=Host(`api-laprovidence.data-worlds.com`)"
+      - "traefik.http.routers.apilaprovidence-https.entrypoints=websecure"
+      - "traefik.http.routers.apilaprovidence-https.tls=true"
+      - "traefik.http.routers.apilaprovidence-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.apilaprovidence-https.service=apilaprovidence-service"
+      - "traefik.http.routers.apilaprovidence-https.middlewares=apilaprovidence-security-headers,apilaprovidence-compress"
+
+      # ===== Service =====
+      - "traefik.http.services.apilaprovidence-service.loadbalancer.server.port=8007"
+      - "traefik.http.services.apilaprovidence-service.loadbalancer.healthcheck.path=/admin/login/"
+      - "traefik.http.services.apilaprovidence-service.loadbalancer.healthcheck.interval=10s"
+      - "traefik.http.services.apilaprovidence-service.loadbalancer.healthcheck.timeout=5s"
+
+      # ===== Middlewares =====
+      - "traefik.http.middlewares.apilaprovidence-redirect-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.apilaprovidence-redirect-https.redirectscheme.permanent=true"
+      - "traefik.http.middlewares.apilaprovidence-security-headers.headers.frameDeny=true"
+      - "traefik.http.middlewares.apilaprovidence-security-headers.headers.contentTypeNosniff=true"
+      - "traefik.http.middlewares.apilaprovidence-security-headers.headers.browserXssFilter=true"
+      - "traefik.http.middlewares.apilaprovidence-security-headers.headers.stsSeconds=31536000"
+      - "traefik.http.middlewares.apilaprovidence-security-headers.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.apilaprovidence-security-headers.headers.stsPreload=true"
+      - "traefik.http.middlewares.apilaprovidence-compress.compress=true"
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8007/admin/login/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  uwsgi_data:
+
+networks:
+  proxy:
+    external: true

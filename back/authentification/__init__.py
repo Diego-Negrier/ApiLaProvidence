@@ -1,0 +1,1 @@
+default_app_config = 'authentification.apps.VotreAppConfig'  # Remplacez 'votre_app' par le nom de votre application

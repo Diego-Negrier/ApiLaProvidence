@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./back  # Le répertoire où se trouve le Dockerfile de Django
+    container_name: django-backend
+    volumes:
+      - ./back:/app
+      - uwsgi_data:/tmp/uwsgi/
+      - web_static:/static/
+      - /volume1/web/web_images/OcciDelice/media/
+    ports:
+      - "8007:8007"
+    env_file:
+      - back/.env
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  uwsgi_data:
+  web_static:

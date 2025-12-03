@@ -1,0 +1,162 @@
+
+1. Application produits
+
+Cette application s’occupe de tout ce qui concerne la gestion des produits (catégories, fournisseurs, produits eux-mêmes, etc.).
+
+	•	Modèles :
+	•	Categorie
+	•	Fournisseur
+	•	Produit
+	•	Fonctionnalités :
+	•	Gestion des catégories de produits.
+	•	Gestion des fournisseurs.
+	•	Gestion des produits (création, mise à jour, suppression).
+	•	Gestion des QR codes pour les produits.
+
+2. Application clients
+
+Cette application gère les informations des clients, leur authentification, et les adresses de livraison et de facturation.
+
+	•	Modèles :
+	•	Client
+	•	AdresseFacturation
+	•	AdresseLivraison
+	•	Fonctionnalités :
+	•	Inscription et gestion du profil client.
+	•	Gestion des adresses de facturation et de livraison.
+	•	Authentification (login, inscription, récupération de mot de passe).
+
+3. Application paniers
+
+Cette application gère tout ce qui concerne les paniers d’achats des clients.
+
+	•	Modèles :
+	•	Panier
+	•	LignePanier
+	•	Fonctionnalités :
+	•	Gestion des paniers d’achat (ajout, suppression, mise à jour).
+	•	Calcul du total du panier et du poids total.
+	•	Ajout de produits dans le panier.
+
+4. Application commandes
+
+Cette application gère les commandes des clients, y compris leur suivi, les tarifs de livraison, et l’historique des commandes.
+
+	•	Modèles :
+	•	Commande
+	•	HistoriqueCommande
+	•	HistoriqueLignePanier
+	•	Tarif
+	•	Fonctionnalités :
+	•	Passage d’une commande.
+	•	Suivi du statut de la commande.
+	•	Calcul des frais de livraison en fonction du poids de la commande.
+	•	Historique des commandes passées.
+
+5. Application livraisons
+
+Cette application gère les informations liées à la livraison des commandes, comme les livreurs, les points relais et les statuts de livraison.
+
+	•	Modèles :
+	•	Livreur
+	•	PointRelais
+	•	Fonctionnalités :
+	•	Gestion des livreurs (création, modification).
+	•	Gestion des points relais (création, modification).
+	•	Attribution des livreurs aux commandes.
+	•	Suivi de l’état de la livraison.
+
+6. Application authentification
+
+Cette application gère l’authentification des utilisateurs et les tokens d’authentification.
+
+	•	Modèles :
+	•	UserToken
+	•	Fonctionnalités :
+	•	Gestion des tokens d’authentification pour les utilisateurs.
+	•	Validation des sessions utilisateur.
+
+7. Application utils
+
+Cette application contient des outils et des fonctions utilitaires pour la génération de QR codes et autres éléments nécessaires dans plusieurs applications.
+
+	•	Fonctionnalités :
+	•	Génération de QR codes pour les produits.
+
+Exemple de structure de projet après découpe :
+
+mon_projet/
+├── produits/
+│   ├── models.py  # Categorie, Fournisseur, Produit
+│   ├── views.py
+│   ├── admin.py
+│   └── migrations/
+├── clients/
+│   ├── models.py  # Client, AdresseFacturation, AdresseLivraison
+│   ├── views.py
+│   ├── admin.py
+│   └── migrations/
+├── paniers/
+│   ├── models.py  # Panier, LignePanier
+│   ├── views.py
+│   ├── admin.py
+│   └── migrations/
+├── commandes/
+│   ├── models.py  # Commande, HistoriqueCommande, HistoriqueLignePanier, Tarif
+│   ├── views.py
+│   ├── admin.py
+│   └── migrations/
+├── livraisons/
+│   ├── models.py  # Livreur, PointRelais
+│   ├── views.py
+│   ├── admin.py
+│   └── migrations/
+├── authentification/
+│   ├── models.py  # UserToken
+│   ├── views.py
+│   ├── admin.py
+│   └── migrations/
+├── utils/
+│   ├── qr_code.py  # Génération de QR codes
+├── manage.py
+└── settings.py
+
+Configuration des applications dans settings.py
+
+Une fois les applications créées, il faut les ajouter à la configuration de Django dans le fichier settings.py de votre projet. Par exemple :
+
+INSTALLED_APPS = [
+    # Applications de base Django
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    # Vos applications
+    'produits',
+    'clients',
+    'paniers',
+    'commandes',
+    'livraisons',
+    'authentification',
+    'utils',
+]
+
+Migration de la base de données
+
+Lorsque vous avez découpé votre projet en plusieurs applications, vous devrez également effectuer les migrations pour chaque application de manière indépendante.
+
+python manage.py makemigrations produits
+python manage.py makemigrations clients
+python manage.py makemigrations paniers
+python manage.py makemigrations commandes
+python manage.py makemigrations livraisons
+python manage.py makemigrations authentification
+python manage.py makemigrations utils
+
+
+
+python manage.py migrate
+

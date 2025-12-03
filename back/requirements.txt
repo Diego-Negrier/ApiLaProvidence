@@ -1,0 +1,54 @@
+# ==========================================
+# BASE DEPENDENCIES (Dev + Prod)
+# ==========================================
+
+# Core Django
+Django==4.2.7
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+django-browser-reload==1.17.0
+
+# Database Drivers
+PyMySQL==1.1.0      # Dev/Fallback (Pure Python)
+
+# Auth & Security
+djangorestframework-simplejwt==5.3.1
+PyJWT==2.8.0
+django-csp==3.8
+
+# Utils
+python-decouple==3.8
+pytz==2023.3
+drf-yasg==1.21.11
+
+# Business
+geopy==2.4.1
+qrcode==7.4.2
+
+# Serveur WSGI
+gunicorn==21.2.0
+
+# Static files
+whitenoise==6.6.0
+
+# Monitoring & Performance
+sentry-sdk==1.38.0
+requests==2.32.5
+
+# Security
+django-ratelimit==4.1.0
+
+Pillow>=10.0.0  # ← Ajoutez cette ligne si elle n'existe pas
+
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+python-dotenv==1.0.0      
+
+
+whitenoise==6.6.0
+
+# Database
+psycopg2-binary>=2.9
+# Web Server
+uWSGI>=2.0.23

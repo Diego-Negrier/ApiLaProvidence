@@ -1,0 +1,24 @@
+.login-container {
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    height: 70vh;
+}
+.cart-login {
+    width: 70%;
+    justify-content: center;
+    background-color: var(--background-second-leger);
+
+    align-items: center;
+    margin:auto;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    padding: auto;
+
+}

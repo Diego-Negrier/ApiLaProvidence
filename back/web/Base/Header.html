@@ -1,0 +1,94 @@
+<header id="MenuRoot">
+    <nav id="topnav" class="topnav">
+        <!-- Bouton hamburger (mobile) -->
+        <button id="hamburger" class="hamburger" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Menu classique -->
+        <div id="desktop_menu" class="menu-classic">
+            <ul class="menu">
+                <li>
+                    <a href="/">
+                        <i class="fa-solid fa-home" title="Home" ></i>
+                         Accueil
+                    </a>
+                </li>
+                <li>
+                    <a href="/catalogue">
+                    <i class="fa-solid fa-list-alt" title="Catalogue" ></i>  
+                    Catalogue
+                    </a>
+                </li>
+                <!-- <li><a href="/contact">Contact</a></li> -->
+                {% if user.is_authenticated %}
+
+                <li><a href="{% url 'edit_fournisseur' %}">
+                    
+                    <i class="fa-solid fa-handshake" title="Fournisseur"></i>
+                     Fournisseur
+                    </a>
+                </li>
+                <li><a href="/commandes">
+                    <i class="fa-solid fa-shopping-cart" title="Commande"></i>
+                     Commandes
+                    </a>
+                </li>
+            {% endif %}
+            </ul>
+        </div>
+
+        <!-- Menu mobile -->
+        <div id="mobile_menu" class="menu-hidden">
+            <ul class="menu">
+                <li>
+                    <a href="/">
+                        <i class="fa-solid fa-home" title="Home" ></i>
+                         Accueil
+                    </a>
+                </li>
+                <li>
+                    <a href="/catalogue">
+                    <i class="fa-solid fa-list-alt" title="Catalogue" ></i>  
+                    Catalogue
+                    </a>
+                </li>
+                <!-- <li><a href="/contact">Contact</a></li> -->
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'edit_fournisseur' %}">
+                    
+                    <i class="fa-solid fa-handshake" title="Fournisseur"></i>
+                     Fournisseur
+                    </a>
+                </li>
+                <li><a href="/commandes">
+                    <i class="fa-solid fa-shopping-cart" title="Commande"></i>
+                     Commandes
+                    </a>
+                </li>
+                {% endif %}
+
+            </ul>
+        </div>
+
+        <!-- Menu d'authentification -->
+        <div id="dropdown-authentification" class="menu-authentification">
+            <button class="dropdown-toggle">
+                <i class="fas fa-user"></i>
+            </button>
+            
+            <ul class="dropdown-menu">
+                {% if user.is_authenticated %}
+                    <!-- <li><a href="/profile">Mon Profil</a></li> -->
+                    <li><a href="/logout">Se Déconnecter</a></li>
+                    {% if user.is_staff %}
+                        <li><a href="/admin">Admin</a></li>
+                    {% endif %}
+                {% else %}
+                    <li><a href="/login">Se Connecter</a></li>
+                    <!-- <li><a href="/signup">Créer un Compte</a></li> -->
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</header>

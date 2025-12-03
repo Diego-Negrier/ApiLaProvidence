@@ -1,0 +1,234 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block Fournisseur %}
+
+<div class="form-wrapper">
+    <div class="form-container">
+        <h2>Modifier vos informations</h2>
+
+        <!-- Affichage des messages -->
+        {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" class="custom-form" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <div class="image-nom-wrapper">
+                    <!-- Masquer l'input file et utiliser un bouton personnalisé -->
+
+                    <div class="image-container-fournisseur">
+                        <!-- Affichage de la photo du fournisseur actuelle (si disponible) -->
+                        {% if fournisseur.photo %}
+                        <div class="photos-image-container">
+                            <!-- Affichage de la photo actuelle du fournisseur -->
+                            <img id="image-preview" src="{{ fournisseur.photo.url }}" alt="Photo du fournisseur"
+                                class="fournisseur-photo">
+                        </div>
+                        {% else %}
+
+                        <!-- Si aucune photo n'est disponible, afficher ce message -->
+                        <p>Aucune photo disponible.</p>
+                        {% endif %}
+
+
+                            <!-- Champ de téléchargement de la nouvelle photo -->
+                            <div class="file-input-container">
+                                <!-- Prévisualisation de la nouvelle image (sera affichée lors du choix du fichier) -->
+                                <img id="image-preview" src="" alt="Prévisualisation"
+                                    style="display: none; max-width: 200px; margin-top: 10px;">
+
+            
+                            </div>
+
+               
+                        </div>
+
+
+                        <div class="NomObject">
+                                <!-- Affichage du nom -->
+                            {{ form.nom }}
+                            <div class="error">{{ form.nom.errors }}</div>
+                            {{ form.prenom }}
+                            <div class="error">{{ form.prenom.errors }}</div>
+
+                            {{ form.contact }}
+                            <div class="error">{{ form.contact.errors }}</div>
+                        </div>
+
+
+                </div>
+
+                    <div class="form-group" style=" display:flex;justify-content:center;width:95%;">
+                    <!-- Champ de sélection de fichier -->
+                    <input type="file" name="photo" class="form-control-file" accept="image/*" id="id_photo"
+                    onchange="updateFileNameAndPreview('id_photo', 'file-name-display', 'image-preview')" /> 
+                    
+                    <input  type="checkbox" name="photo-clear" id="photo-clear_id">
+                    <label for="photo-clear_id">Effacer photos</label>
+
+                
+                    <div class="error">{{ form.photo.errors }}</div>
+      
+                </div>
+
+
+            <div class="form-group">
+                <label for="id_metier">Métier:</label>
+                {{ form.metier }}
+                <div class="error">{{ form.metier.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_tel">Téléphone:</label>
+                {{ form.tel }}
+                <div class="error">{{ form.tel.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_adresse">Adresse:</label>
+                {{ form.adresse }}
+                <div class="error">{{ form.adresse.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_description">Description:</label>
+                {{ form.description }}
+                <div class="error">{{ form.description.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_pays">Pays:</label>
+                {{ form.pays }}
+                <div class="error">{{ form.pays.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_ville">Ville:</label>
+                {{ form.ville }}
+                <div class="error">{{ form.ville.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_latitude">Latitude:</label>
+                {{ form.latitude }}
+                <div class="error">{{ form.latitude.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_longitude">Longitude:</label>
+                {{ form.longitude }}
+                <div class="error">{{ form.longitude.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_type_production">Type de production:</label>
+                {{ form.type_production }}
+                <div class="error">{{ form.type_production.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_experience_annees">Années d'expérience:</label>
+                {{ form.experience_annees }}
+                <div class="error">{{ form.experience_annees.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_certifications">Certifications:</label>
+                {{ form.certifications }}
+                <div class="error">{{ form.certifications.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_engagement_ecologique">Engagement écologique:</label>
+                {{ form.engagement_ecologique }}
+                <div class="error">{{ form.engagement_ecologique.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_conditions_travail">Conditions de travail:</label>
+                {{ form.conditions_travail }}
+                <div class="error">{{ form.conditions_travail.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_objectifs_durables">Objectifs durables:</label>
+                {{ form.objectifs_durables }}
+                <div class="error">{{ form.objectifs_durables.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_produits_principaux">Produits principaux:</label>
+                {{ form.produits_principaux }}
+                <div class="error">{{ form.produits_principaux.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_calendrier_production">Calendrier de production:</label>
+                {{ form.calendrier_production }}
+                <div class="error">{{ form.calendrier_production.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_saisonnalite_respectee">Saisonnalité respectée:</label>
+                {{ form.saisonnalite_respectee }}
+                <div class="error">{{ form.saisonnalite_respectee.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_temoignages_clients">Témoignages clients:</label>
+                {{ form.temoignages_clients }}
+                <div class="error">{{ form.temoignages_clients.errors }}</div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_impact_local">Impact local:</label>
+                {{ form.impact_local }}
+                <div class="error">{{ form.impact_local.errors }}</div>
+            </div>
+
+            <button type="submit" class="submit-btn">Enregistrer</button>
+        </form>
+    </div>
+</div>
+<script>
+    function updateFileNameAndPreview(inputId, displayId, previewId) {
+        var fileInput = document.getElementById(inputId);  // Récupérer l'élément input du fichier
+        var fileNameDisplay = document.getElementById(displayId);  // Récupérer l'élément pour afficher le nom du fichier
+        var imagePreview = document.getElementById(previewId);  // Récupérer l'élément pour la prévisualisation de l'image
+    
+        // Vérifier si les éléments existent avant de les manipuler
+        if (fileInput && fileNameDisplay) {
+            // Vérifier si un fichier est sélectionné
+            if (fileInput.files && fileInput.files[0]) {
+                // Si un fichier est sélectionné, afficher son nom
+                fileNameDisplay.textContent = fileInput.files[0].name;
+    
+                // Prévisualiser l'image choisie
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // Mettre à jour le src de l'élément image-preview
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';  // Afficher l'image de prévisualisation
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+    
+            } else {
+                // Si aucun fichier n'est sélectionné, afficher "Aucun fichier choisi"
+                fileNameDisplay.textContent = 'Aucun fichier choisi';
+    
+                // Masquer l'image de prévisualisation si aucun fichier n'est sélectionné
+                imagePreview.style.display = 'none';
+            }
+        }
+    }
+</script>
+{% endblock %}
