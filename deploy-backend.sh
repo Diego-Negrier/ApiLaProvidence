@@ -225,12 +225,12 @@ if [ -f "$LOCAL_ENV_PATH" ]; then
         exit 1
     }
 
-    if cat "$LOCAL_ENV_PATH" | ssh "$NAS_HOST" "cat > $NAS_PROJECT_PATH/back/.env"; then
-        REMOTE_SIZE=$(ssh "$NAS_HOST" "wc -c < $NAS_PROJECT_PATH/back/.env" 2>/dev/null || echo "0")
+    if cat "$LOCAL_ENV_PATH" | ssh "$NAS_HOST" "cat > $NAS_PROJECT_PATH/back/.env.production"; then
+        REMOTE_SIZE=$(ssh "$NAS_HOST" "wc -c < $NAS_PROJECT_PATH/back/.env.production" 2>/dev/null || echo "0")
         LOCAL_SIZE=$(wc -c < "$LOCAL_ENV_PATH")
 
         if [ "$REMOTE_SIZE" -eq "$LOCAL_SIZE" ]; then
-            log_success ".env.production synced to back/.env ($REMOTE_SIZE bytes)"
+            log_success ".env.production synced to back/.env.production ($REMOTE_SIZE bytes)"
         else
             log_warning "Size mismatch: local=$LOCAL_SIZE, remote=$REMOTE_SIZE"
         fi
@@ -252,7 +252,7 @@ if [ -f "$COMPOSE_LOCAL_PATH" ]; then
     if cat "$COMPOSE_LOCAL_PATH" | ssh "$NAS_HOST" "cat > $NAS_PROJECT_PATH/docker-compose.yml"; then
         log_success "docker-compose.yml synced to NAS"
         log_info "✓ Using pre-built image (no build: section)"
-        log_info "✓ Using correct env file (./back/.env)"
+        log_info "✓ Using correct env file (./back/.env.production)"
     else
         log_error "Failed to sync docker-compose.yml"
         exit 1
