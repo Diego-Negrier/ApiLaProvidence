@@ -27,22 +27,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-# Déterminer l'environnement (local, dev, prod)
+
+# Les variables d'environnement sont déjà chargées par Docker via docker-compose.yml
+# Pas besoin de load_dotenv() en production
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'local')
-
-# Charger le fichier .env approprié
-env_file_map = {
-    'local': '.env.local',
-    'dev': '.env.dev',
-    'prod': '.env.prod',
-}
-
-env_file = BASE_DIR / env_file_map.get(ENVIRONMENT, '.env.local')
-if env_file.exists():
-    load_dotenv(env_file)
-    print(f"📋 Loaded: {env_file.name}")
-else:
-    print(f"⚠️  File not found: {env_file.name}")
+print(f"📋 Environment: {ENVIRONMENT}")
 
 # Debug mode
 DEBUG_STR = os.getenv('DEBUG', 'True')
@@ -58,10 +47,7 @@ USE_DOCKER = os.getenv('USE_DOCKER', 'False').lower() in ('true', '1', 't')
 SECRET_KEY = 'django-insecure-i%xj*prc&(=!w_y*xzlv^p8y4#$^jze18l^nr3i$r#4335%+l0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Définir DEBUG en fonction de l'environnement
-DEBUG =  'True'
-
-print(DEBUG)
+print(f"🔧 DEBUG mode: {DEBUG}")
 ALLOWED_HOSTS = ["*"]
 
 
@@ -382,6 +368,19 @@ else:
 # WHITENOISE STORAGE
 # ==========================================
 
+# Configuration Whitenoise pour les MIME types
+WHITENOISE_MIMETYPES = {
+    '.css': 'text/css',
+    '.js': 'application/javascript',
+    '.json': 'application/json',
+    '.svg': 'image/svg+xml',
+    '.woff': 'font/woff',
+    '.woff2': 'font/woff2',
+}
+
+WHITENOISE_AUTOREFRESH = DEBUG
+WHITENOISE_USE_FINDERS = DEBUG
+WHITENOISE_ALLOW_ALL_ORIGINS = False
 
 STORAGES = {
     "default": {

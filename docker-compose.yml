@@ -12,7 +12,7 @@ services:
       - /volume1/public/LaProvidence/media:/app/media
 
     env_file:
-      - ./back/.env
+      - ./back/.env.production
 
     environment:
       - GUNICORN_CMD_ARGS=--bind=0.0.0.0:8007 --workers=4 --threads=2 --timeout=120

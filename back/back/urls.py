@@ -112,8 +112,16 @@ urlpatterns = [
 
 
 ]
-# Ajouter cette ligne pour servir les fichiers statiques en mode développement
+
+# ==========================================
+# STATIC & MEDIA FILES
+# ==========================================
+
+# Whitenoise gère automatiquement les fichiers statiques en production
+# En mode DEBUG, servir aussi les fichiers statiques et media
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += [path("__reload__/", include("django_browser_reload.urls"))]
+
+# Toujours servir les fichiers media (même en production)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
