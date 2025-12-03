@@ -258,11 +258,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django_browser_reload.middleware.BrowserReloadMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -360,7 +360,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Répertoires contenant les fichiers statiques sources (développement)
-STATICFILES_DIRS = [BASE_DIR / 'web' / 'static']
+# Commenté pour production avec Whitenoise
+# STATICFILES_DIRS = [BASE_DIR / 'web' / 'static']
 
 # ✅ CORRECTION : Chemin absolu pour collectstatic (production)
 STATIC_ROOT = BASE_DIR / 'static'
