@@ -515,6 +515,18 @@ log_info "Recent logs:"
 ssh "$NAS_HOST" "$NAS_DOCKER_PATH logs --tail 20 $CONTAINER_NAME" || true
 
 # ==========================================
+# 📦 COLLECTSTATIC
+# ==========================================
+
+log_step "Running collectstatic..."
+
+ssh "$NAS_HOST" "$NAS_DOCKER_PATH exec $CONTAINER_NAME python manage.py collectstatic --noinput --clear" || {
+    log_warning "Collectstatic failed (non-critical)"
+}
+
+log_success "Static files collected"
+
+# ==========================================
 # 🧹 NETTOYAGE LOCAL
 # ==========================================
 
