@@ -360,8 +360,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Répertoires contenant les fichiers statiques sources (développement)
-# Commenté pour production avec Whitenoise
-# STATICFILES_DIRS = [BASE_DIR / 'web' / 'static']
+STATICFILES_DIRS = [BASE_DIR / 'web' / 'static']
 
 # ✅ CORRECTION : Chemin absolu pour collectstatic (production)
 STATIC_ROOT = BASE_DIR / 'static'
