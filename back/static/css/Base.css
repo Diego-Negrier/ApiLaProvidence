@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@700;900&display=swap');
+
+:root {
+
+  --police-principal: white;      /* Gris foncé */
+  --police-second:black;
+  --font-family: 'Lora', serif;
+  --background: #FFF;
+  --background-second: #f0e9d7;
+  --background-second-leger: rgba(247, 246, 243, 0.858);
+
+  --action-validation: #808000;
+  --action-supprimer: rgb(134, 11, 11);
+  --action-edit: rgb(179, 142, 9);
+  --hover-validation: rgb(12, 80, 12); /* Couleur légèrement plus claire pour le hover */
+  --hover-supprimer: rgb(179, 22, 22); /* Couleur légèrement plus vive */
+  --hover-edit: rgb(220, 180, 20); 
+}
+
+
+button{ background-color: var( --action-validation);
+  color:var(--police-principal);
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Animation fluide */
+
+
+
+
+}
+button:hover
+{ background-color: var( --hover-validation);
+
+}
+p{
+  color: var(--police-second);
+  font-size: 1rem;
+}
+span{
+  color: var(--police-second);
+  font-size: 1rem;
+
+}
+a {
+  color: var(--police-second);
+
+
+}
+a:hover {
+  color: var(--police-principal);
+background-color: var(--hover-validation);
+}
+html {
+  scroll-behavior: smooth;
+}
+
+/* Réinitialisation des marges et des espacements */
+
+body {
+  margin: auto;
+  font-family: var(--font-primary); 
+  font-size: 100%;
+  color : var(--police-second);
+  padding: auto;
+  letter-spacing: .1rem;
+  justify-content: center;
+  background-color: var(--background-second);
+  align-items: center;
+  font-weight: 300;
+  margin-top: 60px; /* Décalage de la taille du menu */
+
+  
+}
+
+
+
+h1, h2, h3 {
+  line-height: 1.2em;
+  font-weight: 400;
+
+  color : var(--action-validation)
+
+}
+
+
+h1{
+  font-size: 3em;
+  color : var(--action-validation)
+
+  
+}
+
+
+h2{
+  text-align: left;
+  font-size: 2em;
+  font-weight: 400;
+  color : var(--action-validation)
+
+
+}
+
+
+
+p{
+  font-size: 1em;
+  ;
+
+  text-align: left;
+}
+
+ul li{
+  text-align: left;
+}
+
+
+/* ------------------------------------------
+---------------------------------------------
+------------------PARTIE MOBILE --------
+---------------------------------------------
+--------------------------------------------- */
+
+@media screen and (max-width: 800px) {
+  body {
+       font-size: 90%;
+    }
+  h1{
+    font-size: 2em;
+    text-align: left;
+
+  }
+  h2{
+    font-size: 1em;
+    text-align: left;
+
+
+  }
+  h3{
+    font-size: 0.5em;
+  }
+  p {
+    font-size: 0.5em
+  }
+ }
+
+
+
+

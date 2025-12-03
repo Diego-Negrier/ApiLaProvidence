@@ -1,0 +1,277 @@
+
+/* Wrapper de formulaire */
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-second);
+    margin: 0;
+    padding: auto;
+    width: 100vw;
+    flex-direction: column;
+}
+
+.custom-form{
+    width: 90vw;
+}
+/* Conteneur principal du formulaire */
+.form-container {
+    padding: auto;
+    border-radius: 8px;
+    background-color: var(--background-second-leger);
+    color: var(--police-second);    width: 95vw;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin: 15px;
+}
+/* Wrapper pour l'image et le nom */
+.image-nom-wrapper {
+    display: flex;
+    align-items: center;  /* Aligne l'image et le texte verticalement */
+    padding: 0px;
+    margin: 0px;
+    justify-content: center;
+    align-items:center;
+    width:95vw
+    
+
+}
+
+
+/* Conteneur d'image avec bordure */
+.image-container-produit {
+    border: 0.2em dotted var(--background);
+    height: 400px;
+    width: 350px;
+    padding: auto;
+    align-items: center;
+    margin: auto;
+    flex-direction: flex;
+    justify-content: center;
+        z-index: 10;
+    background-color: var(--background-second-leger); 
+
+}
+/* Conteneur d'image avec bordure */
+.image-container-fournisseur {
+    border: 0.2em dotted var(--background);
+    padding: auto;
+    align-items: center;
+    margin: auto;
+    flex-direction: flex;
+    justify-content: center;
+        z-index: 10;
+    background-color: var(--background-second-leger); 
+
+}
+.NomObject {
+    width:65vw;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    padding: auto;
+    flex-direction: row;
+
+}
+.fournisseur-photo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%; /* Image ronde */
+}
+
+
+/* Texte et conteneur */
+.nom-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--police-second);
+}
+
+
+
+.nom-container p {
+    margin: 0;
+}
+
+
+
+.custom-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Actions pour les formulaires */
+.actionFormulaire {
+    font-size: 2em;
+}
+
+
+label{
+    text-align: left;
+    width: 100vw;
+    flex-direction: column;
+}
+label img{
+    text-align: left;
+    width: 100vw;
+    flex-direction: column;
+}
+/* Style des groupes de formulaire */
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group input[type="checkbox"],
+.form-group label,
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="email"],
+.form-group input[type="file"],
+.form-group input[type="password"],
+.form-group textarea,
+.form-group select {
+    width: 85%;
+    padding: 12px;
+    border: 1px solid var(--background-second-leger);
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: var(--background-second);
+    color: var(--police-second);
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+    justify-content: center;
+    margin: auto;
+    display: flex;
+    text-align: left;
+}
+
+.form-group input[type="checkbox"]:focus,
+.form-group label:focus,
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus,
+.form-group input[type="email"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Placeholder styling */
+.form-group textarea::placeholder,
+.form-group input::placeholder {
+    font-family: var(--font-family);
+}
+.form-group input[type="checkbox"]{
+    display: flex;
+    margin: 0px;
+    padding: 0px;
+    width:25px
+
+}
+/* Boutons de téléchargement */
+
+.form-group input[type="text"]::placeholder,
+.form-group input[type="number"]::placeholder,
+.form-group input[type="email"]::placeholder,
+.form-group input[type="file"]::placeholder,
+.form-group input[type="password"]::placeholder {
+    /* Add specific placeholder styles here */
+    color: var(--police-second);
+}
+
+.form-group input[type="text"]::placeholder,
+.form-group textarea::placeholder,
+
+.form-group input[type="number"]::placeholder,
+.form-group input[type="email"]::placeholder,
+.form-group input[type="file"]::placeholder,
+.form-group input[type="password"]::placeholder {
+    /* Add specific placeholder styles here */
+    color: #b4aeae
+}
+
+/* Conteneur de l'image de produit */
+.TitreImageProduit {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.ImageDuProduit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0.1em dotted var(--background-second-leger);
+    margin: 0 auto;
+    padding: 30px;
+    background-color: var(--background-second-leger);
+}
+
+.LabelImageProduit {
+    font-size: 20px;
+    color: var(--police-second);
+}
+
+.TitreDuProduit {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--police-principal);
+}
+
+/* Champ fichier personnalisé */
+.custom-file-input {
+    display: none;
+}
+
+
+
+.GrandeImageDuProduit {
+    width: 100%;
+    display: flex;
+    object-fit: cover;
+    justify-content: center;
+    align-items: center;
+    border: 0.1em dotted var(--background-second-leger);
+    margin: 0 auto;
+    padding: 15px 0;
+    font-size: 20px;
+    background-color: var(--background-second-leger);
+    color: var(--police-principal);
+}
+
+
+form .button-container {
+    color:var(--police-second);
+    padding: 5px;
+    width: 10%;
+    justify-content: center;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    border: none;
+    border-radius: 4px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Animation fluide */
+}
+form .submit-btn{
+
+    width:30%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+
+}
+
+

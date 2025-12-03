@@ -1,0 +1,199 @@
+#MenuRoot {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  color:var(--police-second);
+  background-color:var(--background-second-leger);
+  padding: 10px 0;
+  margin-bottom: 20px;
+  height: 40px;  /* Hauteur du menu (ajustez selon votre besoin) */
+}
+
+/* Logo */
+.logo-img {
+  height: 40px;
+  width: auto;
+  margin-left: 15px;
+}
+
+#topnav {
+  display: flex;
+  justify-content: space-around; /* Espacement entre les éléments */
+  align-items: center;
+  width: 100%;
+}
+
+.menu-classic {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  flex-direction: row;
+}
+
+.menu-classic .menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.menu-classic .menu li {
+  position: relative;
+  list-style: none;
+
+}
+
+.menu-classic .menu li a {
+  text-decoration: none;
+  font-size: 16px;
+  padding: 10px 15px;
+  transition: background-color 0.3s;
+  display: block;
+}
+
+.menu-classic .menu li a:hover {
+  border-radius: 5px;
+  text-align: center;
+}
+
+/* Menu d'authentification (droite) */
+/* Menu d'authentification */
+.menu-authentification {
+  position: relative;  /* Important pour positionner le dropdown par rapport à ce parent */
+  border-radius: 50px;
+
+}
+
+/* Bouton d'authentification */
+/* Bouton d'authentification */
+.dropdown-toggle {
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: relative;
+  align-items: center;
+  border-radius: 50%;
+  padding: 13px 13px;
+}
+
+/* Affichage du menu déroulant (initialement caché) */
+/* Affichage du menu déroulant (initialement caché) */
+.dropdown-menu {
+  display: none;
+  position: absolute; /* Positionné par rapport au parent .menu-authentification */
+  top: 100%; /* Positionné juste en dessous du bouton */
+  left: 0; /* Positionné à gauche du parent */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 10;
+  min-width: 200px;
+  padding: 20px 0;
+  background-color: var( --background-second-leger);
+}
+/* Si vous trouvez que le menu est trop à droite, ajustez le 'left' */
+.menu-authentification .dropdown-menu {
+  left: auto;         /* Laisser le calcul automatique de la position à gauche */
+  right: 0;           /* Positionner le menu à droite par rapport au conteneur parent */
+
+}
+/* Afficher le dropdown au survol ou focus du bouton */
+.dropdown-toggle:focus + .dropdown-menu,
+.dropdown-toggle:hover + .dropdown-menu {
+  display: block;
+
+}
+
+/* Liens dans le menu déroulant */
+.dropdown-menu li {
+  padding: 8px 15px;
+  list-style-type: none;
+
+}
+
+.dropdown-menu li a {
+  text-decoration: none;
+  font-size: 14px;
+  display: block;
+  transition: background-color 0.3s ease;
+  position: relative;
+  list-style-type: none;
+}
+
+.dropdown-menu li a:hover {
+  list-style-type: none;
+  padding: 10px;
+
+}
+
+.menu-show {
+  display: block; /* Afficher le dropdown pour mobile */
+}
+
+/* Bouton hamburger */
+.hamburger {
+  display: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Menu mobile (caché par défaut) */
+#mobile_menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 10px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: var( --background-second-leger);
+
+}
+
+#mobile_menu.menu-show {
+  display: block;
+}
+
+/* Liens dans le menu mobile */
+#mobile_menu .menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+#mobile_menu .menu li {
+  margin: 10px 0;
+}
+
+#mobile_menu .menu li a {
+  text-decoration: none;
+  font-size: 18px;
+  padding: 10px 15px;
+  display: block;
+}
+
+#mobile_menu .menu li a:hover {
+  border-radius: 5px;
+}
+
+/* Responsive pour mobile */
+@media screen and (max-width: 768px) {
+  /* Cacher le menu classique sur mobile */
+  .menu-classic {
+    display: none;
+  }
+
+  /* Afficher le bouton hamburger */
+  .hamburger {
+    display: block;
+  }
+}
