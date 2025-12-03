@@ -178,17 +178,17 @@ git log -1 --oneline --decorate
 echo ""
 
 # ==========================================
-# ✅ VERIFICATION BUILDX
+# ✅ VERIFICATION DOCKER
 # ==========================================
 
-log_step "Checking Docker Buildx..."
+log_step "Checking Docker..."
 
-if ! docker buildx version &>/dev/null; then
-    log_error "Docker Buildx not found. Please update Docker Desktop"
+if ! docker version &>/dev/null; then
+    log_error "Docker not found or not running"
     exit 1
 fi
 
-log_success "Buildx ready"
+log_success "Docker ready"
 
 # ==========================================
 # ✅ VERIFICATION DOCKERFILE
