@@ -1,14 +1,26 @@
 #footer {
+<<<<<<< HEAD
     background-color: var(--principal-color); /* Fond vert olive */
     color: var(--light-grey); /* Texte gris clair */
     text-align: center;
     padding:20px;
+=======
+    background-color: var(--background-second); /* Fond vert olive */
+    color: var(--police-principal); /* Texte gris clair */
+    text-align: center;
+    padding:20px;
+    border-top: 2px solid var(--police-accent);
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
   }
   
   #footer .footer-content {
     max-width: 1200px;
     margin: 0 auto;
+<<<<<<< HEAD
     background-color: var(--principal-color); /* Fond vert olive */
+=======
+    background-color: var(--background-second); /* Fond vert olive */
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 
   }
   
@@ -23,7 +35,11 @@
   }
   
   #footer nav ul li a {
+<<<<<<< HEAD
     color: var(--second-color); /* Liens en orange ocre */
+=======
+    color: var(--police-principal); /* Texte gris clair */
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
     text-decoration: none;
     font-weight: bold;
   }

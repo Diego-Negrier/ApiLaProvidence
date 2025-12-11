@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Error 500</title>
+    <style>
+
+        .error-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            justify-content: center
+            width:70%;
+        }
+        :root{
+            --color-principal:#013365;
+            --color-second:#C49D55;
+            --police-principal:'Lato', sans-serif;
+          
+          }
+          
+          body {
+            position: relative;
+            min-width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            font-family: var(--police-principal);
+            background-color: #f4f4f4;
+            padding: 50px;
+
+            
+          }
+          
+          .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+          }
+          
+          h1{
+            font-size: 35px;
+            color: var(--color-principal);
+            text-align: center;
+            font-family: "Clarkson", sans-serif;
+            font-weight: 700;
+            line-height: 1em;
+            letter-spacing: 0;
+            text-rendering: geometricPrecis;
+            -webkit-font-smoothing:antialiased;
+          
+            position: relative;
+            text-align: center;
+          }
+          
+          .section h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px; /* Adjust this value to move the underline higher or lower */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8%; /* Set the width of the underline to 70% of the text width */
+            height: 2px; /* Adjust this value to make the underline thicker or thinner */
+            background-color: var(--color-second); /* Change this value to the desired underline color */
+            opacity: 0.5; /* Adjust this value to make the underline more or less opaque */
+          }
+          
+          h2{
+            font-size: x-large;
+            color: var(--color-principal);
+          }
+          
+          
+
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>Server Error 500</h1>
+        <p>Oops! Something went wrong on our end.</p>
+        <p>Please try again later.</p>
+        <p class="contact">
+            If the problem persists, please <a href="mailto:admin@example.com">contact the administrator</a>.
+        </p>
+        <p>Retour à home</p>
+        <a href=/>Data Worlds</a>
+    </div>
+</body>
+</html>

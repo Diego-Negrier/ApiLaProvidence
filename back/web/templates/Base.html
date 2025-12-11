@@ -1,0 +1,375 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+    <!------------------------------- 
+    --------------------------------- 
+    ---------PAGE Base.HTML----------
+    --------------------------------- 
+     -------------------------------->
+
+<head>
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Import du favicon CSS  -->
+
+    <link rel="icon" type="image/x-icon" href="{% static 'img/logo/favicon.ico' %}">
+    <title>Data Worlds la data aux services des performances</title>
+
+    <!-- Lien icones-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
+
+    <!-- Import Police CSS  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Login.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <!-- Import des fichiers CSS BASE -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Header.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Footer.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Formulaire.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/FournisseurList.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/FournisseurDetail.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Fournisseur.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Table.css' %}">
+
+    <!-- Import des fichiers CSS HOME  -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Home.css' %}">
+
+    <!-- Import des fichiers CSS produits  -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/Produits.css' %}">
+     <!-- Import des fichiers CSS commandes  -->
+     <link rel="stylesheet" type="text/css" href="{% static 'css/Commandes.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/FormCommandes.css' %}">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {% include 'Header.html' %}
+</head>
+<body>
+
+{% block Login%} {% endblock %} 
+
+{% block content%} {% endblock %} 
+{% block Catalogue%} {% endblock %} 
+{% block Fournisseur %} 
+
+
+
+{% endblock %}
+{% block FormulaireProduit %} {% endblock %} 
+{% block Commandes%}{% endblock %} 
+
+
+</body>
+
+<footer>
+
+    {% include 'Footer.html' %}
+
+
+    <script  src="{% static 'js/Home/redirection.js' %}"></script>
+    <script  src="{% static 'js/produits/FiltrerProduits.js' %}"></script>
+    <script  src="{% static 'js/produits/FormulaireProduit.js' %}"></script>
+    <script  src="{% static 'js/produits/SupprimerProduit.js' %}"></script>
+    <script  src="{% static 'js/Base/Menu.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+{% block extra_js %}
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle Vue Grille/Carte
+    const btnGrid = document.getElementById('btnGrid');
+    const btnMap = document.getElementById('btnMap');
+    const gridView = document.getElementById('gridView');
+    const mapView = document.getElementById('mapView');
+    let map = null;
+    let markersInitialized = false;
+
+    btnGrid.addEventListener('click', function() {
+        btnGrid.classList.add('active');
+        btnMap.classList.remove('active');
+        gridView.classList.add('active');
+        mapView.classList.remove('active');
+    });
+
+    btnMap.addEventListener('click', function() {
+        btnMap.classList.add('active');
+        btnGrid.classList.remove('active');
+        mapView.classList.add('active');
+        gridView.classList.remove('active');
+        
+        // Initialiser la carte seulement au premier affichage
+        if (!map) {
+            setTimeout(initMap, 100); // Petit délai pour laisser le DOM se mettre à jour
+        } else {
+            map.invalidateSize(); // Rafraîchir la carte si elle existe déjà
+        }
+    });
+
+    function initMap() {
+        try {
+            // Vérifier que le conteneur existe
+            const mapContainer = document.getElementById('fournisseursMap');
+            if (!mapContainer) {
+                console.error('Conteneur de carte non trouvé');
+                return;
+            }
+
+            // Centre de la France
+            map = L.map('fournisseursMap', {
+                center: [46.603354, 1.888334],
+                zoom: 6,
+                scrollWheelZoom: true
+            });
+
+            // Tuiles OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Cluster de marqueurs
+            const markers = L.markerClusterGroup({
+                maxClusterRadius: 50,
+                spiderfyOnMaxZoom: true,
+                showCoverageOnHover: true,
+                zoomToBoundsOnClick: true
+            });
+
+            // Données des fournisseurs
+            const fournisseurs = [
+                {% for f in fournisseurs %}
+                {
+                    nom: "{{ f.prenom|default:'' }} {{ f.nom }}",
+                    metier: "{{ f.metier }}",
+                    ville: "{{ f.ville }}",
+                    lat: parseFloat("{{ f.latitude|default:'46.603354' }}"),
+                    lng: parseFloat("{{ f.longitude|default:'1.888334' }}"),
+                    url: "{% url 'fournisseur:detail' f.pk %}",
+                    type: "{{ f.type_production|default:'conventionnel' }}",
+                    certif: {% if f.certifications %}true{% else %}false{% endif %}
+                }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ];
+
+            console.log('Nombre de fournisseurs:', fournisseurs.length);
+
+            // Si aucun fournisseur, afficher un message
+            if (fournisseurs.length === 0) {
+                const popup = L.popup()
+                    .setLatLng([46.603354, 1.888334])
+                    .setContent('<div style="text-align:center;"><strong>Aucun fournisseur à afficher</strong></div>')
+                    .openOn(map);
+                return;
+            }
+
+            // Créer les marqueurs
+            let bounds = [];
+            
+            fournisseurs.forEach(function(f) {
+                // Vérifier que les coordonnées sont valides
+                if (isNaN(f.lat) || isNaN(f.lng)) {
+                    console.warn('Coordonnées invalides pour:', f.nom);
+                    return;
+                }
+
+                bounds.push([f.lat, f.lng]);
+
+                // Icône personnalisée selon le type
+                let iconHtml = '⚜';
+                let bgColor = '#1e3a5f'; // action-validation
+                
+                if (f.type === 'biologique' || f.type === 'permaculture') {
+                    iconHtml = '🌱';
+                    bgColor = '#81c784';
+                }
+
+                const customIcon = L.divIcon({
+                    className: 'custom-marker-list',
+                    html: `
+                        <div class="marker-pin-wrapper">
+                            <div class="marker-pin" style="background-color: ${bgColor};">
+                                <span class="marker-icon">${iconHtml}</span>
+                            </div>
+                            ${f.certif ? '<div class="marker-certif-badge">✓</div>' : ''}
+                        </div>
+                    `,
+                    iconSize: [40, 50],
+                    iconAnchor: [20, 50],
+                    popupAnchor: [0, -50]
+                });
+
+                const marker = L.marker([f.lat, f.lng], { icon: customIcon });
+
+                // Popup
+                const popupContent = `
+                    <div class="marker-popup-royal">
+                        <h4>${f.nom}</h4>
+                        <div class="popup-metier">${f.metier}</div>
+                        <div class="popup-ville">📍 ${f.ville}</div>
+                        <a href="${f.url}" class="popup-link">Voir le profil →</a>
+                    </div>
+                `;
+
+                marker.bindPopup(popupContent);
+                markers.addLayer(marker);
+            });
+
+            map.addLayer(markers);
+
+            // Ajuster la vue pour afficher tous les marqueurs
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
+
+            markersInitialized = true;
+            console.log('Carte initialisée avec succès');
+
+        } catch (error) {
+            console.error('Erreur lors de l\'initialisation de la carte:', error);
+        }
+    }
+});
+</script>
+
+<!-- CSS inline pour les marqueurs -->
+<style>
+.custom-marker-list {
+    background: none;
+    border: none;
+}
+
+.marker-pin-wrapper {
+    position: relative;
+}
+
+.marker-pin {
+    width: 40px;
+    height: 40px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    border: 3px solid white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.marker-icon {
+    transform: rotate(45deg);
+    font-size: 1.5rem;
+}
+
+.marker-certif-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ffa726;
+    color: white;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.marker-popup-royal {
+    font-family: 'Lora', serif;
+    min-width: 200px;
+}
+
+.marker-popup-royal h4 {
+    font-family: 'Cinzel', serif;
+    color: #1e3a5f;
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 700;
+}
+
+.popup-metier {
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.popup-ville {
+    font-size: 0.85rem;
+    color: #374151;
+    margin-bottom: 0.75rem;
+}
+
+.popup-link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #1e3a5f;
+    color: white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.popup-link:hover {
+    background: #2c5282;
+    transform: translateX(3px);
+    color: white;
+}
+
+/* Clusters */
+.marker-cluster-small {
+    background-color: rgba(181, 226, 140, 0.6);
+}
+
+.marker-cluster-small div {
+    background-color: rgba(110, 204, 57, 0.6);
+}
+
+.marker-cluster-medium {
+    background-color: rgba(241, 211, 87, 0.6);
+}
+
+.marker-cluster-medium div {
+    background-color: rgba(240, 194, 12, 0.6);
+}
+
+.marker-cluster-large {
+    background-color: rgba(253, 156, 115, 0.6);
+}
+
+.marker-cluster-large div {
+    background-color: rgba(241, 128, 23, 0.6);
+}
+</style>
+{% endblock %}
+
+</footer>
+</html>

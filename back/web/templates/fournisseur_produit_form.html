@@ -1,0 +1,173 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}{% if produit %}Modifier{% else %}Ajouter{% endif %} un Produit - La Providence{% endblock %}
+
+{% block content %}
+<div class="fournisseur-espace">
+    {% include 'fournisseur/includes/nav.html' %}
+
+    <div class="espace-container">
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-{% if produit %}edit{% else %}plus-circle{% endif %}"></i>
+                {% if produit %}Modifier le produit{% else %}Ajouter un produit{% endif %}
+            </h1>
+            <a href="{% url 'fournisseur:produits' %}" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="form-card">
+            <form method="post" enctype="multipart/form-data" class="produit-form">
+                {% csrf_token %}
+
+                <div class="form-section">
+                    <h2><i class="fas fa-info-circle"></i> Informations générales</h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="id_nom">Nom du produit *</label>
+                            {{ form.nom }}
+                            {% if form.nom.errors %}
+                                <span class="error-text">{{ form.nom.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="id_description_courte">Description courte</label>
+                            {{ form.description_courte }}
+                            {% if form.description_courte.errors %}
+                                <span class="error-text">{{ form.description_courte.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="id_description_longue">Description détaillée</label>
+                            {{ form.description_longue }}
+                            {% if form.description_longue.errors %}
+                                <span class="error-text">{{ form.description_longue.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-row two-cols">
+                        <div class="form-group">
+                            <label for="id_categorie">Catégorie</label>
+                            {{ form.categorie }}
+                            {% if form.categorie.errors %}
+                                <span class="error-text">{{ form.categorie.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_souscategorie">Sous-catégorie</label>
+                            {{ form.souscategorie }}
+                            {% if form.souscategorie.errors %}
+                                <span class="error-text">{{ form.souscategorie.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2><i class="fas fa-euro-sign"></i> Prix et stock</h2>
+
+                    <div class="form-row three-cols">
+                        <div class="form-group">
+                            <label for="id_prix_ht">Prix HT (€) *</label>
+                            {{ form.prix_ht }}
+                            {% if form.prix_ht.errors %}
+                                <span class="error-text">{{ form.prix_ht.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_tva">TVA (%) *</label>
+                            {{ form.tva }}
+                            {% if form.tva.errors %}
+                                <span class="error-text">{{ form.tva.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_poids">Poids (kg)</label>
+                            {{ form.poids }}
+                            {% if form.poids.errors %}
+                                <span class="error-text">{{ form.poids.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2><i class="fas fa-image"></i> Image du produit</h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="id_image_principale">Image</label>
+                            {% if produit and produit.image_principale %}
+                            <div class="current-image">
+                                <img src="{{ produit.image_principale.url }}" alt="{{ produit.nom }}">
+                                <p>Image actuelle</p>
+                            </div>
+                            {% endif %}
+                            {{ form.image_principale }}
+                            {% if form.image_principale.errors %}
+                                <span class="error-text">{{ form.image_principale.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2><i class="fas fa-toggle-on"></i> Statut</h2>
+
+                    <div class="form-row two-cols">
+                        <div class="form-group checkbox-group">
+                            {{ form.est_actif }}
+                            <label for="id_est_actif">Produit actif (visible sur le site)</label>
+                            {% if form.est_actif.errors %}
+                                <span class="error-text">{{ form.est_actif.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_statut">Statut du produit</label>
+                            {{ form.statut }}
+                            {% if form.statut.errors %}
+                                <span class="error-text">{{ form.statut.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i>
+                        {% if produit %}Enregistrer les modifications{% else %}Créer le produit{% endif %}
+                    </button>
+                    <a href="{% url 'fournisseur:produits' %}" class="btn-cancel">
+                        <i class="fas fa-times"></i> Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

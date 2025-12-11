@@ -15,7 +15,11 @@ import os
 from dotenv import load_dotenv
 from corsheaders.defaults import default_headers
 from datetime import timedelta
+<<<<<<< HEAD
 
+=======
+load_dotenv()
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 
 # ============================================================================
 # PYMYSQL CONFIGURATION
@@ -58,6 +62,7 @@ ALLOWED_HOSTS = ["*"]
 # back/settings.py
 
 REST_FRAMEWORK = {
+<<<<<<< HEAD
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'patients.authentication.PatientJWTAuthentication',  # ✅ Ta classe custom EN PREMIER
     ),
@@ -73,6 +78,17 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser',
     ),
+=======
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'api.authentication.ClientTokenAuthentication',  # ← Token personnalisé basé sur Client.session_token
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 }
 
 # Configuration JWT
@@ -105,7 +121,11 @@ LOGGING = {
         },
     },
     'loggers': {
+<<<<<<< HEAD
         'patients.authentication': {
+=======
+        'clients.authentication': {
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
             'handlers': ['console'],
             'level': 'DEBUG',
         },
@@ -141,21 +161,35 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+<<<<<<< HEAD
     'rest_framework_simplejwt',
     'django_browser_reload',
     'authentification',
     'Home',
     'produits',
     'clients',
+=======
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
+    'django_browser_reload',
+    'api',
+    'Home',
+    'clients',      # ⚠️ DOIT ÊTRE AVANT 'fournisseurs'
+    'fournisseur',
+    'produits',
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
     'paniers',
     'commandes',
     'livraisons',
     'utils',
 
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
     'corsheaders',# CORS et configuration pour permettre les appels depuis React
     'drf_yasg',
 
@@ -230,6 +264,7 @@ CORS_ALLOW_METHODS = [
 
 
 
+<<<<<<< HEAD
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -240,6 +275,24 @@ AUTH_PASSWORD_VALIDATORS = [
         'OPTIONS': {'min_length': 10}  # Exemple : augmenter à 10
     },
     # ... autres validateurs
+=======
+# ===========================
+# AUTHENTICATION BACKENDS
+# ===========================
+# Permet aux fournisseurs de se connecter avec leur email/password
+AUTHENTICATION_BACKENDS = [
+    'fournisseur.backends.FournisseurAuthBackend',  # Backend pour les fournisseurs
+    'django.contrib.auth.backends.ModelBackend',     # Backend par défaut (admins)
+]
+
+# Validation minimale pour améliorer les performances
+# Vous pouvez activer plus de validateurs en production
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 8}  # Minimum 8 caractères
+    },
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 ]
 
 MIDDLEWARE = [
@@ -253,12 +306,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+<<<<<<< HEAD
+=======
+
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 ]
 
 
 
 
 ROOT_URLCONF = 'back.urls'
+<<<<<<< HEAD
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'web', 'Base')]
 TEMPLATE_DIRS += [os.path.join(BASE_DIR, 'web', 'authentification')]
 
@@ -266,6 +324,12 @@ TEMPLATE_DIRS += [os.path.join(BASE_DIR, 'web', 'Home')]
 TEMPLATE_DIRS += [os.path.join(BASE_DIR, 'web', 'Base','Error')]
 TEMPLATE_DIRS += [os.path.join(BASE_DIR, 'web', 'produits')]
 TEMPLATE_DIRS += [os.path.join(BASE_DIR, 'web', 'commandes')]
+=======
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'web', 'templates')]
+TEMPLATE_DIRS += [os.path.join(BASE_DIR, 'web', 'templates','Error')]
+TEMPLATE_DIRS += [os.path.join(BASE_DIR, 'fournisseur', 'templates')]
+
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 
 TEMPLATES = [
     {
@@ -278,6 +342,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+<<<<<<< HEAD
+=======
+                'web.context_processors.media_url' # ✅ Ajouter
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 
             ],
 
@@ -294,6 +362,7 @@ WSGI_APPLICATION = 'back.wsgi.application'
 
 DATABASES = {
     'default': {
+<<<<<<< HEAD
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.getenv('DATABASE_NAME', 'LaProvidenceDev'),
         'USER': os.getenv('DATABASE_USER', 'DataWorlds'),
@@ -327,6 +396,28 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+=======
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DATABASE_NAME', 'DevLaProvidence'),
+        'USER': os.getenv('DATABASE_USER', 'DataWorlds'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', ' '),
+        'HOST': os.getenv('DATABASE_HOST', 'dataworlds.direct.quickconnect.to'),
+        'PORT': os.getenv('DATABASE_PORT', '5433'),
+        'CONN_MAX_AGE': 600,  # Réutiliser les connexions pendant 10 minutes
+        'CONN_HEALTH_CHECKS': True,  # Vérifier la santé de la connexion
+        'OPTIONS': {
+            'connect_timeout': 10,
+            'options': '-c statement_timeout=30000',  # Timeout des requêtes à 30 secondes
+            'keepalives': 1,
+            'keepalives_idle': 30,
+            'keepalives_interval': 10,
+            'keepalives_count': 5,
+        }
+    }
+}
+
+# Password validation (déjà défini plus haut, suppression du doublon)
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
  
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -358,16 +449,33 @@ STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = '/media/'
 
 # ✅ CORRECTION : Chemin selon l'environnement
+<<<<<<< HEAD
 if USE_DOCKER:
    MEDIA_ROOT = Path('/app/media')
 
 else:
     MEDIA_ROOT = BASE_DIR / 'media'
+=======
+# TOUJOURS sauvegarder sur le NAS Synology pour accessibilité client
+if USE_DOCKER:
+    # Production : Chemin du NAS dans le conteneur Docker
+    MEDIA_ROOT = Path('/volume1/public/LaProvidence/media')
+else:
+    # Local : NAS monté sur Mac
+    MEDIA_ROOT = Path('/Volumes/public/LaProvidence/media')
+
+# ✅ URL de base pour les médias - TOUJOURS pointer vers le NAS pour que les clients puissent y accéder
+# Cette URL sera utilisée pour construire les URLs complètes des images
+MEDIA_BASE_URL = os.getenv(
+        'MEDIA_BASE_URL','https://dataworlds.direct.quickconnect.to/public/LaProvidence/media/'
+)
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 
 # ==========================================
 # WHITENOISE STORAGE
 # ==========================================
 
+<<<<<<< HEAD
 # Configuration Whitenoise pour les MIME types
 WHITENOISE_MIMETYPES = {
     '.css': 'text/css',
@@ -381,6 +489,8 @@ WHITENOISE_MIMETYPES = {
 WHITENOISE_AUTOREFRESH = DEBUG
 WHITENOISE_USE_FINDERS = DEBUG
 WHITENOISE_ALLOW_ALL_ORIGINS = False
+=======
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 
 STORAGES = {
     "default": {
@@ -409,4 +519,45 @@ print(f"   Docker Mode: {USE_DOCKER}\n")
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
+<<<<<<< HEAD
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+=======
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ==========================================
+# PERFORMANCE OPTIMIZATIONS
+# ==========================================
+
+# Cache configuration - utilisation de cache en mémoire pour le développement
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 300,  # 5 minutes par défaut
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000
+        }
+    }
+}
+
+# Optimisation des requêtes
+if DEBUG:
+    # Activer le logging des requêtes SQL en développement
+    LOGGING['loggers']['django.db.backends'] = {
+        'handlers': ['console'],
+        'level': 'DEBUG' if os.getenv('SQL_DEBUG', 'False').lower() == 'true' else 'INFO',
+    }
+
+# Optimisation de l'admin Django
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000  # Augmenter si nécessaire pour l'admin
+
+# ============================================================================
+# STRIPE CONFIGURATION
+# ============================================================================
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY', '')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
+
+if not STRIPE_SECRET_KEY and not DEBUG:
+    raise ValueError("STRIPE_SECRET_KEY doit être défini en production")
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b

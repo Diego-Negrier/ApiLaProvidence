@@ -1,0 +1,136 @@
+{% extends "admin/index.html" %}
+{% load static %}
+
+{% block content %}
+<div id="content-main">
+
+    <!-- Message de bienvenue personnalisé -->
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h2 style="margin: 0 0 15px 0; font-size: 28px;">
+            Bienvenue dans votre espace fournisseur
+        </h2>
+        {% if fournisseur %}
+        <p style="font-size: 18px; margin: 0; opacity: 0.95;">
+            👤 <strong>{{ fournisseur.prenom }} {{ fournisseur.nom }}</strong> - {{ fournisseur.metier }}
+        </p>
+        <p style="font-size: 14px; margin: 10px 0 0 0; opacity: 0.9;">
+            📍 {{ fournisseur.ville }}{% if fournisseur.code_postal %} ({{ fournisseur.code_postal }}){% endif %}
+        </p>
+        {% endif %}
+    </div>
+
+    <!-- Statistiques rapides -->
+    {% if fournisseur %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+
+        <!-- Carte Produits -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 5px solid #4caf50;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <p style="margin: 0; color: #666; font-size: 14px;">Mes Produits</p>
+                    <h2 style="margin: 10px 0 0 0; color: #4caf50; font-size: 36px;">{{ nb_produits }}</h2>
+                </div>
+                <div style="font-size: 48px; opacity: 0.3;">📦</div>
+            </div>
+            <a href="{% url 'fournisseur_admin:produits_produit_changelist' %}" style="display: inline-block; margin-top: 15px; padding: 8px 15px; background: #4caf50; color: white; text-decoration: none; border-radius: 5px; font-size: 14px;">
+                Gérer mes produits →
+            </a>
+        </div>
+
+        <!-- Carte Commandes -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 5px solid #2196f3;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <p style="margin: 0; color: #666; font-size: 14px;">Commandes</p>
+                    <h2 style="margin: 10px 0 0 0; color: #2196f3; font-size: 36px;">{{ nb_commandes }}</h2>
+                </div>
+                <div style="font-size: 48px; opacity: 0.3;">📝</div>
+            </div>
+            <a href="{% url 'fournisseur_admin:commandes_commande_changelist' %}" style="display: inline-block; margin-top: 15px; padding: 8px 15px; background: #2196f3; color: white; text-decoration: none; border-radius: 5px; font-size: 14px;">
+                Voir les commandes →
+            </a>
+        </div>
+
+        <!-- Carte Profil -->
+        <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 5px solid #ff9800;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <p style="margin: 0; color: #666; font-size: 14px;">Mon Profil</p>
+                    <h2 style="margin: 10px 0 0 0; color: #ff9800; font-size: 24px;">Modifier</h2>
+                </div>
+                <div style="font-size: 48px; opacity: 0.3;">👤</div>
+            </div>
+            <a href="{% url 'fournisseur_admin:fournisseur_fournisseur_change' fournisseur.id %}" style="display: inline-block; margin-top: 15px; padding: 8px 15px; background: #ff9800; color: white; text-decoration: none; border-radius: 5px; font-size: 14px;">
+                Éditer mon profil →
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Informations importantes -->
+    <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 20px; border-radius: 5px; margin-bottom: 30px;">
+        <h3 style="margin: 0 0 10px 0; color: #856404;">
+            ℹ️ Informations importantes
+        </h3>
+        <ul style="margin: 0; padding-left: 20px; color: #856404;">
+            <li>Mettez à jour régulièrement vos stocks pour éviter les ruptures</li>
+            <li>Consultez vos commandes pour préparer les livraisons</li>
+            <li>N'oubliez pas de mettre à jour votre calendrier de production</li>
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Liste des applications disponibles (affichage standard Django) -->
+    <h2 style="margin-top: 40px; margin-bottom: 20px; color: #333;">Actions rapides</h2>
+    {{ block.super }}
+
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+    <div class="module" id="recent-actions-module">
+        <h2>Liens utiles</h2>
+        <div style="padding: 15px;">
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="margin-bottom: 10px;">
+                    <a href="{% url 'fournisseur_admin:produits_produit_add' %}" style="display: block; padding: 10px; background: #f5f5f5; border-radius: 5px; text-decoration: none; color: #333;">
+                        ➕ Ajouter un produit
+                    </a>
+                </li>
+                <li style="margin-bottom: 10px;">
+                    <a href="{% url 'fournisseur_admin:produits_produit_changelist' %}" style="display: block; padding: 10px; background: #f5f5f5; border-radius: 5px; text-decoration: none; color: #333;">
+                        📦 Mes produits
+                    </a>
+                </li>
+                <li style="margin-bottom: 10px;">
+                    <a href="{% url 'fournisseur_admin:commandes_commande_changelist' %}" style="display: block; padding: 10px; background: #f5f5f5; border-radius: 5px; text-decoration: none; color: #333;">
+                        📝 Mes commandes
+                    </a>
+                </li>
+                {% if fournisseur %}
+                <li style="margin-bottom: 10px;">
+                    <a href="{% url 'fournisseur_admin:fournisseur_fournisseur_change' fournisseur.id %}" style="display: block; padding: 10px; background: #f5f5f5; border-radius: 5px; text-decoration: none; color: #333;">
+                        👤 Mon profil
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    {% if fournisseur %}
+    <div class="module" style="margin-top: 20px;">
+        <h2>Mes informations</h2>
+        <div style="padding: 15px; font-size: 13px;">
+            <p style="margin: 0 0 8px 0;"><strong>📧 Email :</strong><br>{{ fournisseur.email }}</p>
+            <p style="margin: 0 0 8px 0;"><strong>📞 Téléphone :</strong><br>{{ fournisseur.tel }}</p>
+            <p style="margin: 0 0 8px 0;"><strong>🏭 Type de production :</strong><br>{{ fournisseur.type_production }}</p>
+            {% if fournisseur.experience_annees %}
+            <p style="margin: 0 0 8px 0;"><strong>⏱️ Expérience :</strong><br>{{ fournisseur.experience_annees }} ans</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

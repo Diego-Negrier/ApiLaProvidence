@@ -49,7 +49,11 @@ def view_livreurs(request):
             prix_livraison = livreur.calculer_prix_livraison(poids_total)  # Utiliser le poids total
             print(prix_livraison)
             response_data.append({
+<<<<<<< HEAD
                 'id': livreur.id,
+=======
+                'id': livreur.pk,
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
                 'nom_entreprise': livreur.nom,
                 'telephone': livreur.telephone,
                 'prix_livraison': prix_livraison,  # Appeler la méthode pour obtenir le prix
@@ -92,7 +96,11 @@ def points_relais_proches(request, client_id):
 
             if distance <= 10:  # Vérifier si la distance est inférieure ou égale à 10 km
                 points_proches.append({
+<<<<<<< HEAD
                     "id": point.id,
+=======
+                    "id": point.pk,
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
                     "nom": point.nom,
                     "adresse": point.adresse,
                     "code_postal": point.code_postal,

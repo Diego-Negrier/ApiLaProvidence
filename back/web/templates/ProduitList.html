@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}Produits de qualité{% endblock %}
+{% block content %}
+  <h1>Nos produits</h1>
+
+  <div class="grid">
+    {% for produit in produits %}
+      <article class="card">
+        <a href="{{ produit.get_absolute_url }}">
+          {% if produit.image_principale %}
+            <img class="thumb" src="{{ produit.image_principale.url }}" alt="{{ produit.nom }}">
+          {% else %}
+            <div class="thumb" style="display:flex;align-items:center;justify-content:center;color:#aaa;">Pas d'image</div>
+          {% endif %}
+        </a>
+
+        <div>
+          <a href="{{ produit.get_absolute_url }}"><h2 style="margin:0;font-size:1.05rem;">{{ produit.nom }}</h2></a>
+          <div class="meta">{{ produit.arborescence_complete }}</div>
+        </div>
+
+        <div style="margin-top:auto;">
+          <div>
+            {% if produit.en_promotion and produit.prix_promo_ttc %}
+              <span class="price">{{ produit.prix_promo_ttc|floatformat:2 }}€ TTC</span>
+              <span class="old-price">{{ produit.prix_ttc|floatformat:2 }}€</span>
+            {% else %}
+              <span class="price">{{ produit.prix_ttc|floatformat:2 }}€ TTC</span>
+            {% endif %}
+          </div>
+
+          <div class="badges">
+            {% if produit.est_bio %}<span class="badge">Bio</span>{% endif %}
+            {% if produit.est_local %}<span class="badge">Local</span>{% endif %}
+            {% if produit.est_nouveaute %}<span class="badge">Nouveauté</span>{% endif %}
+            {% if produit.est_en_rupture %}
+              <span class="badge" style="background:#ffdede;color:#a00;">Rupture</span>
+            {% endif %}
+          </div>
+
+          <div style="margin-top:.6rem;">
+            <a href="{{ produit.get_absolute_url }}"><button>Voir</button></a>
+          </div>
+        </div>
+      </article>
+    {% empty %}
+      <p>Aucun produit trouvé.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+    <div style="margin-top:1rem;">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}"><button>← Précédent</button></a>
+      {% endif %}
+      <span style="margin:0 1rem;">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"><button>Suivant →</button></a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
+

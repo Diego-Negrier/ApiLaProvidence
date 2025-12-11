@@ -1,0 +1,370 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nos Fournisseurs - Habitat Autonome Premium{% endblock %}
+
+
+{% block content %}
+
+<!-- Hero Section Royale -->
+<section class="hero-fournisseurs">
+    <div class="hero-ornament-top">⚜</div>
+    <div class="container text-center">
+        <h1 class="hero-title">Nos Artisans & Fournisseurs</h1>
+        <p class="hero-subtitle">Le savoir-faire français au service de l'habitat autonome</p>
+        <div class="hero-divider">
+            <span class="divider-ornament">◆</span>
+            <span class="divider-line"></span>
+            <span class="divider-ornament">◆</span>
+        </div>
+    </div>
+    <div class="hero-ornament-bottom">⚜</div>
+</section>
+
+<div class="container">
+    <!-- Statistiques Royales -->
+    <div class="stats-royal">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number">{{ stats.total }}</div>
+                    <div class="stat-label">Fournisseurs</div>
+                    <div class="stat-ornament">⚜</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-icon">🛠️</div>
+                    <div class="stat-number">{{ stats.metiers }}</div>
+                    <div class="stat-label">Métiers</div>
+                    <div class="stat-ornament">⚜</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-icon">🏘️</div>
+                    <div class="stat-number">{{ stats.villes }}</div>
+                    <div class="stat-label">Villes</div>
+                    <div class="stat-ornament">⚜</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-icon">🌱</div>
+                    <div class="stat-number">{{ stats.bio }}</div>
+                    <div class="stat-label">Bio/Perma</div>
+                    <div class="stat-ornament">⚜</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle Carte/Liste -->
+    <div class="view-toggle-section">
+        <div class="d-flex justify-content-center gap-3 mb-4">
+            <button class="btn-view active" data-view="grid" id="btnGrid">
+                <span class="view-icon">⊞</span>
+                <span class="view-text">Grille</span>
+            </button>
+            <button class="btn-view" data-view="map" id="btnMap">
+                <span class="view-icon">🗺️</span>
+                <span class="view-text">Carte</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtres Royaux -->
+    <div class="filters-royal">
+        <div class="filters-header">
+            <h3 class="filters-title">
+                <span class="title-ornament">◆</span>
+                Affiner votre recherche
+            </h3>
+        </div>
+        
+        <form method="get" action="{% url 'fournisseur:liste' %}" id="filterForm">
+            <div class="row g-3">
+                <!-- Recherche -->
+                <div class="col-md-4">
+                    <div class="form-group-royal">
+                        <label class="form-label-royal">Recherche</label>
+                        <div class="input-with-icon">
+                            <span class="input-icon">🔍</span>
+                            <input 
+                                type="text" 
+                                name="search" 
+                                class="form-control-royal" 
+                                placeholder="Nom, ville, métier..."
+                                value="{{ search }}"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Métier -->
+                <div class="col-md-2">
+                    <div class="form-group-royal">
+                        <label class="form-label-royal">Métier</label>
+                        <select name="metier" class="form-select-royal">
+                            <option value="">Tous</option>
+                            {% for metier_item in metiers_list %}
+                            <option value="{{ metier_item }}" {% if metier == metier_item %}selected{% endif %}>
+                                {{ metier_item }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Ville -->
+                <div class="col-md-2">
+                    <div class="form-group-royal">
+                        <label class="form-label-royal">Ville</label>
+                        <select name="ville" class="form-select-royal">
+                            <option value="">Toutes</option>
+                            {% for ville_item in villes_list %}
+                            <option value="{{ ville_item }}" {% if ville == ville_item %}selected{% endif %}>
+                                {{ ville_item }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Type de production -->
+                <div class="col-md-2">
+                    <div class="form-group-royal">
+                        <label class="form-label-royal">Production</label>
+                        <select name="type_production" class="form-select-royal">
+                            <option value="">Tous types</option>
+                            {% for value, label in types_production %}
+                            <option value="{{ value }}" {% if type_production == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Boutons -->
+                <div class="col-md-2">
+                    <div class="form-group-royal">
+                        <label class="form-label-royal">&nbsp;</label>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn-filter-royal flex-grow-1">
+                                <span class="btn-icon">⚡</span>
+                                Filtrer
+                            </button>
+                            <a href="{% url 'fournisseur:liste' %}" class="btn-reset-royal" title="Réinitialiser">
+                                <span class="btn-icon">↻</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tri -->
+            <div class="sort-royal">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                    <span class="sort-label">
+                        <span class="sort-icon">⇅</span>
+                        Trier par :
+                    </span>
+                    <div class="btn-group-royal" role="group">
+                        <a href="?sort=nom&{{ request.GET.urlencode }}" 
+                           class="btn-sort {% if sort == 'nom' or not sort %}active{% endif %}">
+                            Nom
+                        </a>
+                        <a href="?sort=ville&{{ request.GET.urlencode }}" 
+                           class="btn-sort {% if sort == 'ville' %}active{% endif %}">
+                            Ville
+                        </a>
+                        <a href="?sort=metier&{{ request.GET.urlencode }}" 
+                           class="btn-sort {% if sort == 'metier' %}active{% endif %}">
+                            Métier
+                        </a>
+                        <a href="?sort=experience&{{ request.GET.urlencode }}" 
+                           class="btn-sort {% if sort == 'experience' %}active{% endif %}">
+                            Expérience
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Vue Grille (par défaut) -->
+    <div id="gridView" class="view-content active">
+        {% if fournisseurs %}
+        <div class="row g-4 mb-5">
+            {% for fournisseur in fournisseurs %}
+            <div class="col-lg-4 col-md-6">
+                <div class="fournisseur-card-royal">
+                    <!-- En-tête avec photo -->
+                    <div class="card-header-image">
+                        {% if fournisseur.photo %}
+                        <img src="{{ fournisseur.photo.url }}" alt="{{ fournisseur }}" class="card-photo">
+                        {% else %}
+                        <div class="card-photo-placeholder">
+                            <span class="placeholder-icon">⚜</span>
+                        </div>
+                        {% endif %}
+                        <div class="card-overlay"></div>
+                        <div class="card-header-badges">
+                            {% if fournisseur.type_production == 'biologique' %}
+                            <span class="badge-royal badge-bio">🌱 Bio</span>
+                            {% elif fournisseur.type_production == 'permaculture' %}
+                            <span class="badge-royal badge-perma">🌿 Perma</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Corps de la carte -->
+                    <div class="card-body-royal">
+                        <!-- Nom et Métier -->
+                        <h3 class="card-name">
+                            {{ fournisseur.prenom }} {{ fournisseur.nom }}
+                        </h3>
+                        <div class="card-metier">{{ fournisseur.metier }}</div>
+
+                        <!-- Localisation -->
+                        <div class="card-location">
+                            <span class="location-icon">📍</span>
+                            <span class="location-text">{{ fournisseur.ville }} ({{ fournisseur.code_postal }})</span>
+                        </div>
+
+                        <!-- Badges supplémentaires -->
+                        <div class="card-badges">
+                            {% if fournisseur.zone_livraison_type == 'national' %}
+                            <span class="badge-royal badge-zone">🇫🇷 National</span>
+                            {% elif fournisseur.rayon_livraison_km %}
+                            <span class="badge-royal badge-zone">📍 {{ fournisseur.rayon_livraison_km }} km</span>
+                            {% endif %}
+
+                            {% if fournisseur.certifications %}
+                            <span class="badge-royal badge-certif">✓ Certifié</span>
+                            {% endif %}
+
+                            {% if fournisseur.experience_annees %}
+                            <span class="badge-royal badge-exp">⏳ {{ fournisseur.experience_annees }} ans</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Description -->
+                        <p class="card-description">
+                            {{ fournisseur.description|truncatewords:20 }}
+                        </p>
+
+                        <!-- Footer -->
+                        <div class="card-footer-royal">
+                            <a href="{% url 'fournisseur:detail' fournisseur.pk %}" class="btn-details-royal">
+                                <span class="btn-text">Découvrir</span>
+                                <span class="btn-arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Ornement bas -->
+                    <div class="card-ornament-bottom">⚜</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination Royale -->
+        {% if page_obj.has_other_pages %}
+        <nav aria-label="Navigation des pages" class="pagination-royal">
+            <ul class="pagination-list">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1&{{ request.GET.urlencode }}">
+                        <span class="page-icon">«</span>
+                        <span class="page-text">Première</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode }}">
+                        <span class="page-icon">‹</span>
+                        <span class="page-text">Précédente</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}&{{ request.GET.urlencode }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">
+                        <span class="page-text">Suivante</span>
+                        <span class="page-icon">›</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&{{ request.GET.urlencode }}">
+                        <span class="page-text">Dernière</span>
+                        <span class="page-icon">»</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <!-- Aucun résultat -->
+        <div class="no-results-royal">
+            <div class="no-results-icon">🔍</div>
+            <h3 class="no-results-title">Aucun fournisseur trouvé</h3>
+            <p class="no-results-text">Essayez de modifier vos critères de recherche</p>
+            <a href="{% url 'fournisseur:liste' %}" class="btn-reset-filters">
+                <span class="btn-icon">↻</span>
+                Réinitialiser les filtres
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Vue Carte -->
+    <div id="mapView" class="view-content">
+        <div class="map-container-royal">
+            <div id="fournisseursMap" class="map-interactive"></div>
+            
+            <!-- Légende de la carte -->
+            <div class="map-legend-royal">
+                <h4 class="legend-title">
+                    <span class="legend-icon">🗺️</span>
+                    Légende
+                </h4>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <span class="legend-marker bio">🌱</span>
+                        <span class="legend-text">Bio/Permaculture</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-marker standard">⚜</span>
+                        <span class="legend-text">Conventionnel</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-marker certif">✓</span>
+                        <span class="legend-text">Certifié</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

@@ -1,0 +1,412 @@
+/*
+ * CSS personnalisé pour l'espace fournisseur
+ * La Providence - Admin Fournisseur
+ */
+
+/* ===================================
+ * VARIABLES
+ * =================================== */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --primary-color: #764ba2;
+    --secondary-color: #667eea;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --danger-color: #f44336;
+    --info-color: #2196f3;
+    --light-bg: #f5f5f5;
+    --card-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    --border-radius: 8px;
+}
+
+/* ===================================
+ * HEADER
+ * =================================== */
+#header {
+    background: var(--primary-gradient) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+#site-name a {
+    color: white !important;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#site-name a:hover {
+    opacity: 0.9;
+}
+
+/* ===================================
+ * BREADCRUMBS
+ * =================================== */
+.breadcrumbs {
+    background: var(--light-bg) !important;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+.breadcrumbs a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+    text-decoration: underline;
+}
+
+/* ===================================
+ * MODULES ET CARTES
+ * =================================== */
+.module {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+    background: var(--primary-gradient) !important;
+    color: white !important;
+    padding: 15px 20px;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.module table {
+    border: none;
+}
+
+/* ===================================
+ * BOUTONS
+ * =================================== */
+.button,
+input[type=submit],
+input[type=button],
+.submit-row input,
+button,
+a.button {
+    background: var(--primary-gradient) !important;
+    border: none !important;
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: opacity 0.3s, transform 0.2s;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.button:hover,
+input[type=submit]:hover,
+input[type=button]:hover,
+.submit-row input:hover,
+button:hover,
+a.button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.button.default,
+input[type=submit].default,
+.submit-row input.default {
+    background: var(--success-color) !important;
+}
+
+.deletelink {
+    background: var(--danger-color) !important;
+}
+
+.addlink,
+.changelink {
+    background: var(--info-color) !important;
+    padding: 8px 15px !important;
+    border-radius: var(--border-radius) !important;
+    color: white !important;
+    text-decoration: none !important;
+    display: inline-block;
+    margin: 5px;
+}
+
+.addlink:before,
+.changelink:before {
+    content: none !important;
+}
+
+/* ===================================
+ * TABLES
+ * =================================== */
+#result_list {
+    border: none;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+#result_list thead th {
+    background: var(--primary-gradient) !important;
+    color: white !important;
+    padding: 12px;
+    font-weight: 600;
+}
+
+#result_list tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#result_list tbody tr:hover {
+    background: #f9f9f9;
+}
+
+#result_list tbody td {
+    padding: 12px;
+}
+
+/* ===================================
+ * FORMULAIRES
+ * =================================== */
+.form-row {
+    margin-bottom: 20px;
+}
+
+.form-row label {
+    font-weight: 500;
+    color: #555;
+    display: block;
+    margin-bottom: 8px;
+}
+
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=url],
+input[type=number],
+textarea,
+select {
+    border: 2px solid #e0e0e0 !important;
+    border-radius: var(--border-radius) !important;
+    padding: 10px !important;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+input[type=text]:focus,
+input[type=password]:focus,
+input[type=email]:focus,
+input[type=url]:focus,
+input[type=number]:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary-color) !important;
+    outline: none;
+}
+
+/* ===================================
+ * MESSAGES
+ * =================================== */
+.messagelist {
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.messagelist li {
+    list-style: none;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.messagelist li.success {
+    background: #d4edda;
+    color: #155724;
+    border-left: 4px solid var(--success-color);
+}
+
+.messagelist li.warning {
+    background: #fff3cd;
+    color: #856404;
+    border-left: 4px solid var(--warning-color);
+}
+
+.messagelist li.error {
+    background: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid var(--danger-color);
+}
+
+.messagelist li.info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border-left: 4px solid var(--info-color);
+}
+
+/* ===================================
+ * CHANGELIST ACTIONS
+ * =================================== */
+#changelist-filter {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 15px;
+}
+
+#changelist-filter h2 {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 10px 15px;
+    margin: -15px -15px 15px -15px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+#changelist-filter h3 {
+    color: var(--primary-color);
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#changelist-filter li {
+    padding: 5px 0;
+}
+
+#changelist-filter a {
+    color: #666;
+    text-decoration: none;
+}
+
+#changelist-filter a:hover {
+    color: var(--primary-color);
+}
+
+#changelist-filter li.selected a {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* ===================================
+ * DASHBOARD CARDS
+ * =================================== */
+.dashboard-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.dashboard-card h3 {
+    margin: 0 0 10px 0;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.dashboard-card .number {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.dashboard-card.green { border-left: 5px solid var(--success-color); }
+.dashboard-card.blue { border-left: 5px solid var(--info-color); }
+.dashboard-card.orange { border-left: 5px solid var(--warning-color); }
+.dashboard-card.red { border-left: 5px solid var(--danger-color); }
+
+/* ===================================
+ * PAGINATION
+ * =================================== */
+.pagination {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.pagination a,
+.pagination span {
+    padding: 8px 12px;
+    margin: 0 2px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: #666;
+}
+
+.pagination a:hover {
+    background: var(--light-bg);
+    color: var(--primary-color);
+}
+
+.pagination .this-page {
+    background: var(--primary-gradient);
+    color: white;
+    font-weight: bold;
+}
+
+/* ===================================
+ * SIDEBAR
+ * =================================== */
+#content-related .module {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+}
+
+/* ===================================
+ * RESPONSIVE
+ * =================================== */
+@media (max-width: 768px) {
+    .dashboard-card {
+        margin-bottom: 15px;
+    }
+
+    #changelist-filter {
+        width: 100% !important;
+        margin-bottom: 20px;
+    }
+
+    .module table {
+        font-size: 12px;
+    }
+}
+
+/* ===================================
+ * ANIMATIONS
+ * =================================== */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.module {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* ===================================
+ * FOOTER
+ * =================================== */
+#footer {
+    text-align: center;
+    padding: 20px;
+    background: var(--light-bg);
+    color: #666;
+    margin-top: 40px;
+    border-radius: var(--border-radius);
+}

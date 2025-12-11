@@ -1,0 +1,50 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'fournisseur/css/fournisseur.css' %}">
+
+<nav class="fournisseur-nav">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <a href="{% url 'fournisseur:dashboard' %}">
+                <i class="fas fa-tractor"></i>
+                <span>Espace Fournisseur</span>
+            </a>
+        </div>
+
+        <div class="nav-menu" id="navMenu">
+            <a href="{% url 'fournisseur:dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{% url 'fournisseur:produits' %}" class="nav-link {% if 'produit' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="fas fa-box"></i>
+                <span>Mes Produits</span>
+            </a>
+
+            <a href="{% url 'fournisseur:commandes' %}" class="nav-link {% if request.resolver_match.url_name == 'commandes' %}active{% endif %}">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Mes Commandes</span>
+            </a>
+
+            <a href="{% url 'fournisseur:profil' %}" class="nav-link {% if request.resolver_match.url_name == 'profil' %}active{% endif %}">
+                <i class="fas fa-user"></i>
+                <span>Mon Profil</span>
+            </a>
+
+            <a href="{% url 'logout' %}" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Déconnexion</span>
+            </a>
+        </div>
+
+        <button class="nav-toggle" id="navToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<script>
+document.getElementById('navToggle')?.addEventListener('click', function() {
+    document.getElementById('navMenu')?.classList.toggle('active');
+});
+</script>

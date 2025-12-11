@@ -1,0 +1,84 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}Connexion Fournisseur - La Providence{% endblock %}
+
+{% block content %}
+<div class="login-fournisseur">
+    <div class="login-container">
+        <div class="login-header">
+            <i class="fas fa-tractor"></i>
+            <h1>Espace Fournisseur</h1>
+            <p>La Providence</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="login-card">
+            <h2>Connexion à votre espace</h2>
+
+            <form method="post" class="login-form">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-user"></i>
+                        Email ou Username
+                    </label>
+                    <input
+                        type="text"
+                        id="email"
+                        name="email"
+                        required
+                        autofocus
+                        placeholder="email@exemple.com ou username"
+                        class="form-control"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                        Mot de passe
+                    </label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                        placeholder="••••••••"
+                        class="form-control"
+                    >
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Se connecter
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>Vous êtes administrateur ?</p>
+                <a href="/admin/">Accéder à l'admin principal →</a>
+            </div>
+
+            <div class="login-help">
+                <p><i class="fas fa-question-circle"></i> <strong>Problème de connexion ?</strong></p>
+                <p>Contactez l'administrateur pour réinitialiser votre mot de passe</p>
+            </div>
+        </div>
+
+        <div class="login-brand">
+            <p>🌱 La Providence - Espace Fournisseur</p>
+            <p>Production locale et durable</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

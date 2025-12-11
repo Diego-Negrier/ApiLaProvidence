@@ -1,0 +1,56 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}Supprimer {{ produit.nom }} - La Providence{% endblock %}
+
+{% block content %}
+<div class="fournisseur-espace">
+    {% include 'fournisseur/includes/nav.html' %}
+
+    <div class="espace-container">
+        <div class="confirmation-card">
+            <div class="warning-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+
+            <h1>Confirmer la suppression</h1>
+
+            <div class="produit-preview">
+                {% if produit.image_principale %}
+                <img src="{{ produit.image_principale.url }}" alt="{{ produit.nom }}">
+                {% else %}
+                <div class="produit-placeholder">
+                    <span>{{ produit.icone_produit|default:"📦" }}</span>
+                </div>
+                {% endif %}
+
+                <div class="produit-info">
+                    <h2>{{ produit.nom }}</h2>
+                    <p class="produit-numero">{{ produit.numero_unique }}</p>
+                    <p class="produit-prix">{{ produit.prix_ttc|floatformat:2 }}€ TTC</p>
+                </div>
+            </div>
+
+            <div class="warning-message">
+                <i class="fas fa-info-circle"></i>
+                Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.
+            </div>
+
+            <form method="post" class="delete-form">
+                {% csrf_token %}
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-delete">
+                        <i class="fas fa-trash"></i>
+                        Oui, supprimer définitivement
+                    </button>
+                    <a href="{% url 'fournisseur:produits' %}" class="btn-cancel">
+                        <i class="fas fa-arrow-left"></i>
+                        Non, retour à la liste
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

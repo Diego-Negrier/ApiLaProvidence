@@ -1,0 +1,157 @@
+<header id="MenuRoot">
+    <nav id="topnav" class="topnav glass-nav">
+
+        <!-- Logo / Nom avec animation -->
+        <div class="brand">
+            <a href="/" class="brand-link">
+                <i class="fa-solid fa-leaf brand-icon"></i>
+                <span class="brand-text">La Providence</span>
+            </a>
+        </div>
+
+        <!-- Menu desktop -->
+        <ul class="menu desktop-only">
+            <li><a href="/" class="nav-link">
+                <i class="fa-solid fa-home"></i>
+                <span>Accueil</span>
+            </a></li>
+            
+            <li><a href="{% url 'produits:liste' %}" class="nav-link">
+                <i class="fa-solid fa-list"></i>
+                <span>Magasin</span>
+            </a></li>
+
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'fournisseur:liste' %}"  class="nav-link">
+                    <i class="fa-solid fa-handshake"></i>
+                    <span>Fournisseur</span>
+                </a></li>
+
+                <li><a href="/commandes" class="nav-link">
+                    <i class="fa-solid fa-shopping-cart"></i>
+                    <span>Commandes</span>
+                </a></li>
+            {% endif %}
+        </ul>
+
+        <!-- Auth menu amélioré -->
+        <div class="auth-box">
+            <button class="auth-btn" aria-label="Menu utilisateur">
+                {% if user.is_authenticated %}
+                    <i class="fas fa-user-circle"></i>
+                    <span class="user-name">{{ user.username }}</span>
+                {% else %}
+                    <i class="fas fa-sign-in-alt"></i>
+                {% endif %}
+            </button>
+
+            <ul class="auth-dropdown">
+                {% if user.is_authenticated %}
+                    <li class="dropdown-header">
+                        <i class="fas fa-user"></i>
+                        <span>{{ user.email|default:user.username }}</span>
+                    </li>
+                    <li class="dropdown-divider"></li>
+                    
+                    {% if user.is_staff %}
+                        {% if user.is_superuser %}
+                            <li><a href="/admin/" class="dropdown-link">
+                                <i class="fas fa-shield-alt"></i> Admin Principal
+                            </a></li>
+                        {% endif %}
+                        {% if user.username|slice:":12" == "fournisseur_" %}
+                            <li><a href="{% url 'fournisseur:dashboard' %}" class="dropdown-link">
+                                <i class="fas fa-tractor"></i> Espace Fournisseur
+                            </a></li>
+                        {% endif %}
+                    {% endif %}
+                    
+                    <li><a href="{% url 'logout' %}" class="dropdown-link logout">
+                        <i class="fas fa-sign-out-alt"></i> Se Déconnecter
+                    </a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" class="dropdown-link">
+                        <i class="fas fa-sign-in-alt"></i> Se Connecter
+                    </a></li>
+                    <li><a href="/register" class="dropdown-link">
+                        <i class="fas fa-user-plus"></i> S'inscrire
+                    </a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Hamburger animé (mobile) -->
+        <button id="hamburger" class="hamburger mobile-only" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- Menu mobile amélioré -->
+        <div id="mobile_menu" class="mobile-menu menu-hidden">
+            <ul class="mobile-nav">
+                <li><a href="/" class="mobile-link">
+                    <i class="fa-solid fa-home"></i>
+                    <span>Accueil</span>
+                </a></li>
+                
+                <li><a href="/catalogue" class="mobile-link">
+                    <i class="fa-solid fa-list"></i>
+                    <span>Catalogue</span>
+                </a></li>
+
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'fournisseur:liste' %}" class="mobile-link">
+                        <i class="fa-solid fa-handshake"></i>
+                        <span>Fournisseur</span>
+                    </a></li>
+
+                    <li><a href="/commandes" class="mobile-link">
+                        <i class="fa-solid fa-shopping-cart"></i>
+                        <span>Commandes</span>
+                    </a></li>
+                {% endif %}
+            </ul>
+
+            <div class="mobile-divider"></div>
+
+            <ul class="mobile-auth">
+                {% if user.is_authenticated %}
+                    <li class="mobile-user">
+                        <i class="fas fa-user-circle"></i>
+                        <span>{{ user.username }}</span>
+                    </li>
+
+                    {% if user.is_staff %}
+                        {% if user.is_superuser %}
+                            <li><a href="/admin/" class="mobile-link">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Admin Principal</span>
+                            </a></li>
+                        {% endif %}
+                        {% if user.username|slice:":12" == "fournisseur_" %}
+                            <li><a href="{% url 'fournisseur:dashboard' %}" class="mobile-link">
+                                <i class="fas fa-tractor"></i>
+                                <span>Espace Fournisseur</span>
+                            </a></li>
+                        {% endif %}
+                    {% endif %}
+
+                    <li><a href="{% url 'logout' %}" class="mobile-link logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Se Déconnecter</span>
+                    </a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" class="mobile-link">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Se Connecter</span>
+                    </a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </nav>
+</header>
+
+<!-- Overlay pour fermer le menu mobile -->
+<div id="menu-overlay" class="menu-overlay"></div>

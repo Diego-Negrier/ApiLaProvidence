@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #MenuRoot {
   width: 100%;
   position: fixed;
@@ -197,3 +198,490 @@
     display: block;
   }
 }
+=======
+/* ========================================
+   MENU ROYAL - LA PROVIDENCE
+======================================== */
+header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}   
+/* ----- NAVBAR GLASS EFFECT ----- */
+.glass-nav {
+    backdrop-filter: blur(15px);
+    background: linear-gradient(135deg,
+        rgba(248, 246, 240, 0.95) 0%,
+        rgba(232, 220, 196, 0.90) 100%);
+    padding: 0.8rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--border-gold);
+    box-shadow: 0 4px 20px var(--shadow-noble);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    width: 70vw;
+}
+
+.glass-nav .menu {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.glass-nav.scrolled {
+    padding: 0.7rem 2.5rem;
+    background: linear-gradient(135deg, 
+        rgba(248, 246, 240, 0.98) 0%, 
+        rgba(232, 220, 196, 0.95) 100%);
+    box-shadow: 0 6px 25px var(--shadow-noble);
+}
+
+/* ----- BRAND ----- */
+.brand a {
+    font-family: var(--font-family-title);
+    font-weight: 700;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--action-validation);
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+}
+
+.brand-icon {
+    color: var(--border-gold);
+    font-size: 1.8rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(5deg); }
+}
+
+.brand a:hover {
+    color: var(--hover-validation);
+    transform: translateX(5px);
+}
+
+.brand-text {
+    position: relative;
+}
+
+.brand-text::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--border-gold);
+    transition: width 0.3s ease;
+}
+
+.brand a:hover .brand-text::after {
+    width: 100%;
+}
+
+/* ----- DESKTOP MENU ----- */
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.menu li a,
+.nav-link {
+    font-family: var(--font-family-title);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--police-second);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.nav-link i {
+    color: var(--border-gold);
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--police-principal);
+    background: linear-gradient(135deg, var(--action-validation), var(--hover-validation));
+    border-color: var(--border-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px var(--shadow-noble);
+}
+
+.nav-link:hover i {
+    transform: scale(1.2) rotate(5deg);
+}
+
+/* ----- AUTH DROPDOWN ----- */
+.auth-box {
+    position: relative;
+}
+
+.auth-btn {
+    background: linear-gradient(135deg,
+        var(--action-validation) 0%,
+        var(--hover-validation) 100%);
+    color: var(--police-principal);
+    border: 2px solid var(--border-gold);
+    border-radius: 50px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-family-title);
+    font-weight: 600;
+}
+
+.auth-btn i {
+    font-size: 1.3rem;
+}
+
+.auth-btn:hover {
+    background: linear-gradient(135deg, 
+        var(--hover-validation) 0%, 
+        var(--action-validation) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--shadow-noble);
+}
+
+.user-name {
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    color: var(--police-principal);
+}
+
+.auth-dropdown {
+    position: absolute;
+    right: 0;
+    top: 120%;
+    background: linear-gradient(135deg, 
+        rgba(248, 246, 240, 0.98) 0%, 
+        rgba(232, 220, 196, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 0.5rem 0;
+    min-width: 220px;
+    box-shadow: 0 8px 25px var(--shadow-noble);
+    border: 2px solid var(--border-gold);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.auth-box:hover .auth-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-header {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--border-gold);
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-family: var(--font-family-title);
+    color: var(--action-validation);
+    font-weight: 600;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--border-gold);
+    margin: 0.5rem 0;
+}
+
+.dropdown-link {
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--police-second);
+    font-family: var(--font-family-body);
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.dropdown-link i {
+    color: var(--border-gold);
+    width: 20px;
+}
+
+.dropdown-link:hover {
+    background: linear-gradient(90deg, 
+        rgba(30, 58, 95, 0.1), 
+        transparent);
+    color: var(--action-validation);
+    padding-left: 1.5rem;
+}
+
+.dropdown-link.logout {
+    color: var(--action-supprimer);
+}
+
+.dropdown-link.logout:hover {
+    background: linear-gradient(90deg, 
+        rgba(139, 21, 56, 0.1), 
+        transparent);
+    color: var(--hover-supprimer);
+}
+
+/* ----- HAMBURGER ----- */
+.hamburger {
+    background: none;
+    border: none;
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    padding: 0.7rem;
+    z-index: 1001;
+}
+
+.hamburger span {
+    width: 30px;
+    height: 3px;
+    background: var(--action-validation);
+    border-radius: 5px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hamburger:hover span {
+    background: var(--hover-validation);
+}
+
+/* Animation hamburger actif */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(9px, 9px);
+    background: var(--action-supprimer);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-20px);
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(9px, -9px);
+    background: var(--action-supprimer);
+}
+
+/* ----- MOBILE MENU ----- */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    height: 100vh;
+    background: linear-gradient(180deg, 
+        rgba(248, 246, 240, 0.98) 0%, 
+        rgba(232, 220, 196, 0.95) 100%);
+    backdrop-filter: blur(15px);
+    box-shadow: -6px 0 25px var(--shadow-noble);
+    border-left: 3px solid var(--border-gold);
+    padding: 6rem 1.5rem 2rem;
+    overflow-y: auto;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 999;
+}
+
+.mobile-menu.active {
+    right: 0;
+}
+
+.mobile-menu.menu-hidden {
+    right: -100%;
+}
+
+.mobile-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+}
+
+.mobile-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    color: var(--police-second);
+    font-family: var(--font-family-title);
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    margin-bottom: 0.7rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    letter-spacing: 0.05em;
+}
+
+.mobile-link i {
+    color: var(--border-gold);
+    font-size: 1.3rem;
+    width: 25px;
+}
+
+.mobile-link:hover,
+.mobile-link:active {
+    background: linear-gradient(90deg, 
+        var(--action-validation), 
+        var(--hover-validation));
+    color: var(--police-principal);
+    border-color: var(--border-gold);
+    transform: translateX(5px);
+}
+
+.mobile-divider {
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        var(--border-gold), 
+        transparent);
+    margin: 1.5rem 0;
+}
+
+.mobile-auth {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-user {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 1.2rem;
+    background: linear-gradient(90deg, 
+        rgba(30, 58, 95, 0.1), 
+        transparent);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--border-gold);
+}
+
+.mobile-user i {
+    color: var(--action-validation);
+    font-size: 1.5rem;
+}
+
+.mobile-user span {
+    font-family: var(--font-family-title);
+    color: var(--action-validation);
+    font-weight: 600;
+}
+
+/* ----- OVERLAY ----- */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 36, 22, 0.6);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 998;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ----- RESPONSIVE ----- */
+.desktop-only { 
+    display: flex; 
+}
+ul ,.menu.desktop-only  a {
+    list-style-type: none;
+    text-decoration: none;
+}   
+.mobile-only { 
+    display: none; 
+}
+
+@media (max-width: 850px) {
+    .glass-nav {
+        padding: 1rem 1.5rem;
+    }
+    
+    .desktop-only { 
+        display: none !important; 
+    }
+    
+    .mobile-only { 
+        display: flex !important; 
+    }
+    
+    .hamburger {
+        display: flex !important;
+    }
+    
+    .brand a {
+        font-size: 1.3rem;
+    }
+    
+    .brand-icon {
+        font-size: 1.5rem;
+    }
+    
+    .user-name { 
+        display: none; 
+    }
+    
+    .auth-btn {
+        padding: 0.5rem 1rem;
+    }
+    
+    .mobile-menu {
+        width: 85%;
+        max-width: 350px;
+    }
+}
+
+@media (max-width: 480px) {
+    .glass-nav {
+        padding: 0.8rem 1rem;
+    }
+    
+    .brand a {
+        font-size: 1.1rem;
+    }
+    
+    .mobile-menu {
+        width: 90%;
+    }
+}
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b

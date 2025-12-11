@@ -18,11 +18,15 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+<<<<<<< HEAD
 from authentification.views import *
+=======
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 from Home.views import Home
 from clients.views import *
 from produits.views import *
 from paniers.views import *
+<<<<<<< HEAD
 from livraisons.views import * 
 from commandes.views import * 
 
@@ -30,6 +34,34 @@ from commandes.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+=======
+from livraisons.views import *
+from commandes.views import *
+from api.views import *
+from django.contrib.auth.views import LogoutView
+
+# Import du site admin fournisseur
+from fournisseur.admin_site import fournisseur_admin_site
+# Import des admins fournisseur pour les enregistrer
+import fournisseur.admin_fournisseur  # noqa
+
+# Import du login unifié
+from fournisseur.views_espace import unified_login
+
+
+urlpatterns = [
+    # Admin principal (pour les administrateurs)
+    path('admin/', admin.site.urls),
+
+    # Espace fournisseur (pour les fournisseurs connectés)
+    path('fournisseur-admin/', fournisseur_admin_site.urls),
+
+    # Logout général
+    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+
+    # Login général (admin ou fournisseur)
+    path('login/', unified_login, name='login'),
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 
     ############ BACK #####################
 
@@ -37,6 +69,7 @@ urlpatterns = [
 
     path('',Home,name='home'),
 
+<<<<<<< HEAD
 
     # Login
     path('login/', login_view, name='login'),
@@ -113,6 +146,24 @@ urlpatterns = [
 
 ]
 
+=======
+    path('fournisseurs/', include('fournisseur.urls')),  # ✅ Ajouter ceci
+    path('magasin/', include('produits.urls', namespace='produits')),
+
+
+
+# ==========================================
+# API
+# ==========================================
+
+    path('api/',include('api.urls'))
+
+
+
+
+
+]
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 # ==========================================
 # STATIC & MEDIA FILES
 # ==========================================

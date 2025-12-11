@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ fournisseur.nom }} - Détail Fournisseur{% endblock %}
+
+
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb-royal">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">⚜ Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'fournisseur:liste' %}">Fournisseurs</a></li>
+            <li class="breadcrumb-item active">{{ fournisseur.nom }}</li>
+        </ol>
+    </nav>
+</div>
+
+<!-- Hero Section avec image -->
+<section class="hero-detail">
+    <div class="hero-background">
+        {% if fournisseur.photo %}
+        <img src="{{ fournisseur.photo.url }}" alt="{{ fournisseur.nom }}" class="hero-image">
+        {% else %}
+        <div class="hero-placeholder"></div>
+        {% endif %}
+        <div class="hero-gradient"></div>
+    </div>
+    
+    <div class="container hero-container">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="hero-content">
+                    <span class="badge-metier">{{ fournisseur.metier }}</span>
+                    <h1 class="hero-title">{{ fournisseur.nom }}</h1>
+                    <p class="hero-subtitle">{{ fournisseur.description|truncatewords:30 }}</p>
+
+                    <div class="hero-badges mt-4">
+                        {% if fournisseur.type_production == 'bio' %}
+                        <span class="badge-hero badge-bio">
+                            <span class="badge-icon">🌱</span> Agriculture Biologique
+                        </span>
+                        {% endif %}
+
+                        {% if fournisseur.type_production == 'permaculture' %}
+                        <span class="badge-hero badge-perma">
+                            <span class="badge-icon">🌿</span> Permaculture
+                        </span>
+                        {% endif %}
+
+                        {% if fournisseur.certifications %}
+                        <span class="badge-hero badge-certif">
+                            <span class="badge-icon">✓</span> Certifié
+                        </span>
+                        {% endif %}
+
+                        {% if fournisseur.experience_annees %}
+                        <span class="badge-hero badge-exp">
+                            <span class="badge-icon">⏳</span> {{ fournisseur.experience_annees }} ans d'expérience
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="hero-seal">
+                    <div class="seal-circle">
+                        <div class="seal-inner">
+                            <span class="seal-icon">⚜</span>
+                            <span class="seal-text">Artisan</span>
+                            <span class="seal-subtext">Certifié</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Colonne principale -->
+        <div class="col-lg-8">
+
+            <!-- Carte À propos -->
+            <div class="card-royal mb-4">
+                <div class="card-royal-header">
+                    <h2 class="card-title">
+                        <span class="title-ornament">◆</span>
+                        À propos
+                    </h2>
+                </div>
+                <div class="card-royal-body">
+                    <p class="description-text">{{ fournisseur.description }}</p>
+                </div>
+            </div>
+
+            <!-- Carte Interactive -->
+            <div class="card-royal mb-4">
+                <div class="card-royal-header">
+                    <h2 class="card-title">
+                        <span class="title-ornament">◆</span>
+                        Localisation & Zone de Livraison
+                    </h2>
+                </div>
+                <div class="card-royal-body p-0">
+                    <div id="map" class="fournisseur-map"></div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="legend-marker" style="background: var(--action-validation);"></span>
+                            <span class="legend-text">{{ fournisseur.ville }}</span>
+                        </div>
+                        {% if fournisseur.rayon_livraison_km %}
+                        <div class="legend-item">
+                            <span class="legend-circle"></span>
+                            <span class="legend-text">Zone de livraison ({{ fournisseur.rayon_livraison_km }} km)</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte Produits et Services -->
+            {% if fournisseur.produits_services %}
+            <div class="card-royal mb-4">
+                <div class="card-royal-header">
+                    <h2 class="card-title">
+                        <span class="title-ornament">◆</span>
+                        Produits & Services
+                    </h2>
+                </div>
+                <div class="card-royal-body">
+                    <div class="produits-grid">
+                        {% for produit in fournisseur.produits_services.splitlines %}
+                        <div class="produit-item">
+                            <span class="produit-icon">✦</span>
+                            <span class="produit-text">{{ produit }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Carte Certifications -->
+            {% if fournisseur.certifications %}
+            <div class="card-royal mb-4">
+                <div class="card-royal-header">
+                    <h2 class="card-title">
+                        <span class="title-ornament">◆</span>
+                        Certifications & Labels
+                    </h2>
+                </div>
+                <div class="card-royal-body">
+                    <div class="certifications-list">
+                        {% for certif in fournisseur.certifications.splitlines %}
+                        <div class="certification-item">
+                            <span class="certif-seal">✓</span>
+                            <span class="certif-text">{{ certif }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Carte Philosophie -->
+            {% if fournisseur.philosophie %}
+            <div class="card-royal mb-4">
+                <div class="card-royal-header">
+                    <h2 class="card-title">
+                        <span class="title-ornament">◆</span>
+                        Philosophie & Valeurs
+                    </h2>
+                </div>
+                <div class="card-royal-body">
+                    <blockquote class="philosophie-quote">
+                        <p>{{ fournisseur.philosophie }}</p>
+                    </blockquote>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Colonne latérale -->
+        <div class="col-lg-4">
+
+            <!-- Carte Contact -->
+            <div class="card-royal sidebar-card mb-4">
+                <div class="card-royal-header">
+                    <h3 class="card-title-small">
+                        <span class="title-ornament-small">◆</span>
+                        Contact
+                    </h3>
+                </div>
+                <div class="card-royal-body">
+
+                    {% if fournisseur.telephone %}
+                    <div class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-info">
+                            <div class="contact-label">Téléphone</div>
+                            <a href="tel:{{ fournisseur.telephone }}" class="contact-value">
+                                {{ fournisseur.telephone }}
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if fournisseur.email %}
+                    <div class="contact-item">
+                        <div class="contact-icon">✉️</div>
+                        <div class="contact-info">
+                            <div class="contact-label">Email</div>
+                            <a href="mailto:{{ fournisseur.email }}" class="contact-value">
+                                {{ fournisseur.email }}
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if fournisseur.site_web %}
+                    <div class="contact-item">
+                        <div class="contact-icon">🌐</div>
+                        <div class="contact-info">
+                            <div class="contact-label">Site web</div>
+                            <a href="{{ fournisseur.site_web }}" target="_blank" class="contact-value">
+                                Visiter le site
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <button class="btn-contact-royal mt-3" onclick="window.location.href='mailto:{{ fournisseur.email }}'">
+                        <span class="btn-icon">✉</span>
+                        Envoyer un message
+                    </button>
+                </div>
+            </div>
+
+            <!-- Carte Horaires d'ouverture (nouveau) -->
+            {% if fournisseur.horaires %}
+            <div class="card-royal sidebar-card mb-4">
+                <div class="card-royal-header">
+                    <h3 class="card-title-small">
+                        <span class="title-ornament-small">◆</span>
+                        Horaires
+                    </h3>
+                </div>
+                <div class="card-royal-body">
+                    <div class="horaires-list">
+                        {% for horaire in fournisseur.horaires.splitlines %}
+                        <div class="horaire-item">
+                            <span class="horaire-icon">🕐</span>
+                            <span class="horaire-text">{{ horaire }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Carte Informations -->
+            <div class="card-royal sidebar-card mb-4">
+                <div class="card-royal-header">
+                    <h3 class="card-title-small">
+                        <span class="title-ornament-small">◆</span>
+                        Informations
+                    </h3>
+                </div>
+                <div class="card-royal-body">
+
+                    <div class="info-row">
+                        <span class="info-label">Métier</span>
+                        <span class="info-value">{{ fournisseur.metier }}</span>
+                    </div>
+
+                    {% if fournisseur.specialites %}
+                    <div class="info-row">
+                        <span class="info-label">Spécialités</span>
+                        <span class="info-value">{{ fournisseur.specialites }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if fournisseur.type_production %}
+                    <div class="info-row">
+                        <span class="info-label">Type</span>
+                        <span class="info-value">{{ fournisseur.get_type_production_display }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if fournisseur.capacite_production %}
+                    <div class="info-row">
+                        <span class="info-label">Capacité</span>
+                        <span class="info-value">{{ fournisseur.capacite_production }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if fournisseur.delai_livraison_jours %}
+                    <div class="info-row">
+                        <span class="info-label">Délai</span>
+                        <span class="info-value">{{ fournisseur.delai_livraison_jours }} jours</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Bouton retour -->
+            <a href="{% url 'fournisseur:liste' %}" class="btn-retour-royal">
+                <span class="btn-icon">←</span>
+                Retour à la liste
+            </a>
+
+        </div>
+    </div>
+</div>
+
+<!-- Section fournisseurs similaires -->
+{% if fournisseurs_similaires %}
+<section class="section-similaires">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span class="title-ornament">◆</span>
+                Fournisseurs Similaires
+                <span class="title-ornament">◆</span>
+            </h2>
+            <p class="section-subtitle">Découvrez d'autres artisans de la même région</p>
+        </div>
+
+        <div class="row">
+            {% for similaire in fournisseurs_similaires %}
+            <div class="col-md-4 mb-4">
+                <div class="card-similaire">
+                    <div class="similaire-image">
+                        {% if similaire.photo %}
+                        <img src="{{ similaire.photo.url }}" alt="{{ similaire.nom }}">
+                        {% else %}
+                        <div class="similaire-placeholder">
+                            <span>⚜</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="similaire-header">
+                        <h4 class="similaire-nom">{{ similaire.nom }}</h4>
+                        <span class="similaire-metier">{{ similaire.metier }}</span>
+                    </div>
+                    <div class="similaire-body">
+                        <p class="similaire-ville">📍 {{ similaire.ville }}</p>
+                        <p class="similaire-description">{{ similaire.description|truncatewords:15 }}</p>
+                    </div>
+                    <div class="similaire-footer">
+                        <a href="{% url 'fournisseur:detail' similaire.pk %}" class="btn-voir-similaire">
+                            Découvrir →
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

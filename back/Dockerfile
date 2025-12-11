@@ -62,10 +62,14 @@ RUN chmod +x /entrypoint.sh
 COPY . .
 
 # LAYER 6: Collectstatic (dépend du code, donc après COPY)
+<<<<<<< HEAD
 RUN echo "🔍 Running collectstatic..." && \
     python manage.py collectstatic --noinput --clear && \
     echo "✅ Collectstatic completed" && \
     ls -la /app/static/ || echo "⚠️  Collectstatic failed, continuing..."
+=======
+RUN python manage.py collectstatic --noinput --clear || echo "⚠️  Collectstatic failed, continuing..."
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8007/admin/login/ || exit 1

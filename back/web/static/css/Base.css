@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@700;900&display=swap');
 
 :root {
@@ -51,10 +52,115 @@ a:hover {
   color: var(--police-principal);
 background-color: var(--hover-validation);
 }
+=======
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:wght@300;400;600;700&display=swap');
+
+:root {
+  /* Palette royale française */
+  --police-principal: #F8F6F0;           /* Blanc cassé ivoire */
+  --police-second: #2C2416;              /* Brun profond */
+  --police-accent: #8B7355;              /* Bronze */
+  
+  /* Typographie noble */
+  --font-family-title: 'Cinzel', serif;  /* Titres majestueux */
+  --font-family-body: 'Cormorant Garamond', serif; /* Corps élégant */
+  
+  /* Fonds inspirés du patrimoine */
+  --background: #FAF8F3;                 /* Ivoire clair */
+  --background-second: #E8DCC4;          /* Beige parchemin */
+  --background-second-leger: rgba(232, 220, 196, 0.4);
+  --background-royal: linear-gradient(135deg, #1e3a5f 0%, #2d5986 100%); /* Bleu royal */
+  
+  /* Actions avec couleurs héraldiques */
+  --action-validation: #1e3a5f;         /* Bleu royal de France */
+  --action-supprimer: #8B1538;          /* Rouge bordeaux */
+  --action-edit: #B8860B;               /* Or antique */
+  
+  --hover-validation: #2d5986;          /* Bleu royal clair */
+  --hover-supprimer: #A52A4A;           /* Rouge grenat */
+  --hover-edit: #DAA520;                /* Or lumineux */
+  
+  /* Ornements */
+  --border-gold: #C9A961;               /* Or pâle */
+  --shadow-noble: rgba(44, 36, 22, 0.15);
+}
+
+button { 
+  background: linear-gradient(135deg, var(--action-validation) 0%, #2d5986 100%);
+  color: var(--police-principal);
+  padding: 15px 30px;
+  border-radius: 5px;
+  border: 2px solid var(--border-gold);
+  transition: all 0.4s ease;
+  font-family: var(--font-family-title);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px var(--shadow-noble);
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+button:hover {
+  background: linear-gradient(135deg, var(--hover-validation) 0%, #3a6ba5 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow-noble);
+  border-color: var(--action-edit);
+}
+
+p {
+  color: var(--police-second);
+  font-size: 1.1rem;
+  font-family: var(--font-family-body);
+  line-height: 1.8;
+  text-align: justify;
+}
+
+span {
+  color: var(--police-second);
+  font-size: 1rem;
+  font-family: var(--font-family-body);
+}
+
+a {
+  color: var(--action-validation);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+  font-family: var(--font-family-body);
+  font-weight: 600;
+}
+
+a:hover {
+  color: var(--police-principal);
+  background: linear-gradient(90deg, var(--action-validation), var(--hover-validation));
+  padding: 5px 10px;
+  border-radius: 3px;
+  border-bottom: 1px solid var(--border-gold);
+}
+
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 html {
   scroll-behavior: smooth;
 }
 
+<<<<<<< HEAD
 /* Réinitialisation des marges et des espacements */
 
 body {
@@ -119,10 +225,92 @@ ul li{
 ---------------------------------------------
 ------------------PARTIE MOBILE --------
 ---------------------------------------------
+=======
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family-body); 
+  font-size: 100%;
+  color: var(--police-second);
+  letter-spacing: 0.05rem;
+  background: var(--background);
+  background-image: 
+    linear-gradient(rgba(232, 220, 196, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 220, 196, 0.3) 1px, transparent 1px);
+  background-size: 50px 50px;
+  font-weight: 300;
+  margin-top: 60px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-family-title);
+  line-height: 1.3em;
+  font-weight: 700;
+  color: var(--action-validation);
+  text-shadow: 2px 2px 4px var(--shadow-noble);
+  position: relative;
+}
+
+h1 {
+  font-size: 3.5em;
+  color: var(--action-validation);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5em;
+  border-bottom: 3px solid var(--border-gold);
+  padding-bottom: 15px;
+  display: inline-block;
+}
+
+h1::after {
+  content: '⚜';
+  margin-left: 15px;
+  color: var(--border-gold);
+  font-size: 0.7em;
+}
+
+h2 {
+  text-align: left;
+  font-size: 2.5em;
+  font-weight: 600;
+  color: var(--action-validation);
+  margin-top: 1.5em;
+  margin-bottom: 0.8em;
+  letter-spacing: 0.03em;
+}
+
+h2::before {
+  content: '◆ ';
+  color: var(--border-gold);
+  margin-right: 10px;
+}
+
+h3 {
+  font-size: 1.5em;
+  color: var(--police-accent);
+  font-weight: 600;
+}
+
+p {
+  font-size: 1.1em;
+  text-align: left;
+  margin: 1em 0;
+}
+
+ul li {
+  text-align: left;
+  font-family: var(--font-family-body);
+  color: var(--police-second);
+  line-height: 1.8;
+}
+
+/* ------------------------------------------
+  PARTIE MOBILE
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b
 --------------------------------------------- */
 
 @media screen and (max-width: 800px) {
   body {
+<<<<<<< HEAD
        font-size: 90%;
     }
   h1{
@@ -147,3 +335,37 @@ ul li{
 
 
 
+=======
+    font-size: 90%;
+  }
+  
+  h1 {
+    font-size: 2.2em;
+    text-align: left;
+  }
+  
+  h1::after {
+    display: block;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+  
+  h2 {
+    font-size: 1.6em;
+    text-align: left;
+  }
+  
+  h3 {
+    font-size: 1.2em;
+  }
+  
+  p {
+    font-size: 1em;
+  }
+  
+  button {
+    padding: 12px 20px;
+    font-size: 0.8rem;
+  }
+}
+>>>>>>> e097b66e17a2ea974af903e357531f5ddcf8880b

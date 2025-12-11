@@ -1,0 +1,203 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}Mon Profil - {{ fournisseur.nom }} - La Providence{% endblock %}
+
+{% block content %}
+<div class="fournisseur-espace">
+    {% include 'fournisseur/includes/nav.html' %}
+
+    <div class="espace-container">
+        <div class="page-header">
+            <h1><i class="fas fa-user-edit"></i> Mon Profil</h1>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="profil-grid">
+            <!-- Carte d'informations personnelles -->
+            <div class="profil-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-user"></i> Informations personnelles</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="info-label">Nom</span>
+                        <span class="info-value">{{ fournisseur.nom }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Prénom</span>
+                        <span class="info-value">{{ fournisseur.prenom }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email</span>
+                        <span class="info-value">{{ fournisseur.email }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Téléphone</span>
+                        <span class="info-value">{{ fournisseur.tel }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Métier</span>
+                        <span class="info-value">{{ fournisseur.metier }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Contact</span>
+                        <span class="info-value">{{ fournisseur.contact }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte d'adresse -->
+            <div class="profil-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-map-marker-alt"></i> Adresse</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="info-label">Adresse</span>
+                        <span class="info-value">{{ fournisseur.adresse }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Code postal</span>
+                        <span class="info-value">{{ fournisseur.code_postal }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Ville</span>
+                        <span class="info-value">{{ fournisseur.ville }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Pays</span>
+                        <span class="info-value">{{ fournisseur.pays }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte de production -->
+            <div class="profil-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-leaf"></i> Production</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="info-label">Type de production</span>
+                        <span class="info-value">{{ fournisseur.get_type_production_display }}</span>
+                    </div>
+                    {% if fournisseur.experience_annees %}
+                    <div class="info-row">
+                        <span class="info-label">Expérience</span>
+                        <span class="info-value">{{ fournisseur.experience_annees }} ans</span>
+                    </div>
+                    {% endif %}
+                    {% if fournisseur.certifications %}
+                    <div class="info-row">
+                        <span class="info-label">Certifications</span>
+                        <span class="info-value">{{ fournisseur.certifications }}</span>
+                    </div>
+                    {% endif %}
+                    {% if fournisseur.description %}
+                    <div class="info-row">
+                        <span class="info-label">Description</span>
+                        <span class="info-value">{{ fournisseur.description }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Carte de livraison -->
+            <div class="profil-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-truck"></i> Livraison</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="info-label">Type de zone</span>
+                        <span class="info-value">{{ fournisseur.get_zone_livraison_type_display }}</span>
+                    </div>
+                    {% if fournisseur.rayon_livraison_km %}
+                    <div class="info-row">
+                        <span class="info-label">Rayon de livraison</span>
+                        <span class="info-value">{{ fournisseur.rayon_livraison_km }} km</span>
+                    </div>
+                    {% endif %}
+                    <div class="info-row">
+                        <span class="info-label">Frais de base</span>
+                        <span class="info-value">{{ fournisseur.frais_livraison_base|floatformat:2 }}€</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Frais par km</span>
+                        <span class="info-value">{{ fournisseur.frais_livraison_par_km|floatformat:2 }}€</span>
+                    </div>
+                    {% if fournisseur.livraison_gratuite_montant %}
+                    <div class="info-row">
+                        <span class="info-label">Livraison gratuite dès</span>
+                        <span class="info-value">{{ fournisseur.livraison_gratuite_montant|floatformat:2 }}€</span>
+                    </div>
+                    {% endif %}
+                    {% if fournisseur.jours_livraison %}
+                    <div class="info-row">
+                        <span class="info-label">Jours de livraison</span>
+                        <span class="info-value">{{ fournisseur.jours_livraison }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="info-row">
+                        <span class="info-label">Délai de livraison</span>
+                        <span class="info-value">{{ fournisseur.delai_livraison_jours }} jours</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulaire de changement de mot de passe -->
+        <div class="password-section">
+            <div class="profil-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-lock"></i> Changer mon mot de passe</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="password-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="change_password">
+
+                        <div class="form-group">
+                            <label for="current_password">Mot de passe actuel</label>
+                            <input type="password" id="current_password" name="current_password" required class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new_password">Nouveau mot de passe</label>
+                            <input type="password" id="new_password" name="new_password" required class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm_password">Confirmer le nouveau mot de passe</label>
+                            <input type="password" id="confirm_password" name="confirm_password" required class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-save"></i> Changer le mot de passe
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="help-section">
+            <div class="help-card">
+                <i class="fas fa-question-circle"></i>
+                <h3>Besoin de modifier vos informations ?</h3>
+                <p>Pour modifier vos informations personnelles, votre adresse ou vos conditions de livraison, veuillez contacter l'administrateur.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
