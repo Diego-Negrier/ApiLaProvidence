@@ -1,0 +1,490 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="Home">
+
+    <!-- Vidéo de fond -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="{% static 'image/HomeLaProvidence.mp4' %}" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section fade-in">
+        <h1 class="hero-title">La Providence</h1>
+        <p class="hero-subtitle">Du terroir à votre table</p>
+        <div class="hero-ornament">⚜</div>
+    </div>
+
+    <!-- Welcome Card -->
+    <div class="welcome-card slide-up">
+        <div class="card-header">
+            <h2>Bienvenue cher producteur</h2>
+            <p class="subtitle">Votre vitrine directe vers les consommateurs</p>
+        </div>
+
+        <p class="intro">
+            La Providence met en lumière vos produits authentiques, issus de nos terroirs, 
+            auprès d'une clientèle engagée dans une démarche de circuit court et de proximité.
+        </p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="features-grid">
+
+        <!-- Card 1 : Catalogue -->
+        <div class="feature-card fade-in" style="animation-delay: 0.2s">
+            <div class="card-icon">
+                <i class="fas fa-box-open"></i>
+            </div>
+            <h3>Valorisez vos Produits</h3>
+            <p>
+                Présentez vos produits du terroir : descriptions, photos, tarifs. 
+                Faites rayonner le savoir-faire de votre clocher.
+            </p>
+            <button class="btn-royal" onclick="redirectToCatalog()">
+                <span>Gérer mon Catalogue</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        {% if user.is_authenticated %}
+        <!-- Card 2 : Commandes -->
+        <div class="feature-card fade-in" style="animation-delay: 0.4s">
+            <div class="card-icon">
+                <i class="fa-solid fa-shopping-cart"></i>
+            </div>
+            <h3>Vos Commandes</h3>
+            <p>
+                Accédez aux commandes : quantités, retrait, livraison, coordonnées. 
+                Tout est centralisé pour votre organisation.
+            </p>
+            <button class="btn-royal" onclick="redirectToCommande()">
+                <span>Mes Commandes</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- Card 3 : Profil -->
+        <div class="feature-card fade-in" style="animation-delay: 0.6s">
+            <div class="card-icon">
+                <i class="fa-solid fa-handshake"></i>
+            </div>
+            <h3>Votre Profil</h3>
+            <p>
+                Actualisez vos informations : exploitation, présentation, moyens de paiement. 
+                Renforcez la proximité avec vos clients.
+            </p>
+            <button class="btn-royal" onclick="redirectToFournisseur()">
+                <span>Mon Profil Producteur</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section fade-in" style="animation-delay: 0.8s">
+        <h2>Rejoignez la communauté La Providence</h2>
+        <p>Ensemble, valorisons nos terroirs et nos savoir-faire</p>
+        <div class="cta-ornament">⚜ ◆ ⚜</div>
+    </div>
+
+</div>
+
+<style>
+
+/* ========================================
+   GLOBAL & ANIMATIONS
+======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.Home {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    position: relative;
+}
+
+.fade-in {
+    animation: fadeIn 1s ease forwards;
+    opacity: 0;
+}
+
+.slide-up {
+    animation: slideUp 1s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(50px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================
+   VIDEO BACKGROUND
+======================================== */
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -2;
+}
+
+.video-background video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(60%) contrast(1.1);
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        rgba(30, 58, 95, 0.5) 0%,
+        rgba(44, 36, 22, 0.7) 100%
+    );
+    z-index: -1;
+}
+
+/* ========================================
+   HERO SECTION
+======================================== */
+.hero-section {
+    text-align: center;
+    padding: 4rem 2rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.hero-title {
+    font-family: var(--font-family-title);
+    font-size: 4.5rem;
+    font-weight: 900;
+    color: var(--police-principal);
+    text-shadow: 
+        3px 3px 6px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(201, 169, 97, 0.4);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-family: var(--font-family-body);
+    font-size: 1.6rem;
+    color: var(--police-principal);
+    font-style: italic;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1.5rem;
+}
+
+.hero-ornament {
+    font-size: 2.5rem;
+    color: var(--border-gold);
+    text-shadow: 0 0 20px rgba(201, 169, 97, 0.6);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+/* ========================================
+   WELCOME CARD
+======================================== */
+.welcome-card {
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    padding: 2.5rem;
+    border-radius: 15px;
+    background: linear-gradient(
+        135deg,
+        rgba(248, 246, 240, 0.95) 0%,
+        rgba(232, 220, 196, 0.92) 100%
+    );
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--border-gold);
+}
+
+.card-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border-gold);
+    padding-bottom: 1rem;
+}
+
+.card-header h2 {
+    font-family: var(--font-family-title);
+    font-size: 2rem;
+    color: var(--action-validation);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-family: var(--font-family-body);
+    font-size: 1.2rem;
+    color: var(--police-accent);
+    font-style: italic;
+}
+
+.intro {
+    font-family: var(--font-family-body);
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--police-second);
+    text-align: center;
+}
+
+/* ========================================
+   FEATURES GRID
+======================================== */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+    padding: 0 1rem;
+}
+
+.feature-card {
+    background: linear-gradient(
+        135deg,
+        rgba(248, 246, 240, 0.98) 0%,
+        rgba(232, 220, 196, 0.95) 100%
+    );
+    backdrop-filter: blur(12px);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    border: 2px solid var(--border-gold);
+    transition: all 0.4s ease;
+    opacity: 0;
+    text-align: center;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.35);
+    border-color: var(--action-validation);
+}
+
+.card-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(
+        135deg,
+        var(--action-validation),
+        var(--hover-validation)
+    );
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(30, 58, 95, 0.3);
+}
+
+.card-icon i {
+    font-size: 2.2rem;
+    color: var(--police-principal);
+}
+
+.feature-card h3 {
+    font-family: var(--font-family-title);
+    font-size: 1.5rem;
+    color: var(--action-validation);
+    margin-bottom: 1rem;
+}
+
+.feature-card p {
+    font-family: var(--font-family-body);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--police-second);
+    margin-bottom: 1.5rem;
+}
+
+/* ========================================
+   BUTTON ROYAL
+======================================== */
+.btn-royal {
+    background: linear-gradient(
+        135deg,
+        var(--action-validation) 0%,
+        var(--hover-validation) 100%
+    );
+    color: var(--police-principal);
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    border: 2px solid var(--border-gold);
+    font-family: var(--font-family-title);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-royal:hover {
+    background: linear-gradient(
+        135deg,
+        var(--hover-validation) 0%,
+        var(--action-validation) 100%
+    );
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-color: var(--action-edit);
+}
+
+.btn-royal i {
+    transition: transform 0.3s ease;
+}
+
+.btn-royal:hover i {
+    transform: translateX(5px);
+}
+
+/* ========================================
+   CTA SECTION
+======================================== */
+.cta-section {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: linear-gradient(
+        135deg,
+        rgba(248, 246, 240, 0.85) 0%,
+        rgba(232, 220, 196, 0.80) 100%
+    );
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 2px solid var(--border-gold);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+}
+
+.cta-section h2 {
+    font-family: var(--font-family-title);
+    font-size: 2rem;
+    color: var(--action-validation);
+    margin-bottom: 1rem;
+}
+
+.cta-section p {
+    font-family: var(--font-family-body);
+    font-size: 1.2rem;
+    color: var(--police-second);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+}
+
+.cta-ornament {
+    font-size: 1.5rem;
+    color: var(--border-gold);
+    letter-spacing: 1rem;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .welcome-card {
+        padding: 1.5rem;
+    }
+    
+    .card-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .feature-card {
+        padding: 1.5rem;
+    }
+    
+    .card-icon {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .card-icon i {
+        font-size: 1.8rem;
+    }
+    
+    .cta-section {
+        padding: 2rem 1.5rem;
+    }
+    
+    .cta-section h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .Home {
+        padding: 1rem 0.5rem;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .btn-royal {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+</style>
+
+<script>
+function redirectToCatalog() {
+    window.location.href = '/catalogue';
+}
+
+function redirectToCommande() {
+    window.location.href = '/commandes';
+}
+
+</script>
+
+{% endblock %}

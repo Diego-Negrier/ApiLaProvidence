@@ -1,0 +1,89 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Espace Fournisseur - La Providence{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'fournisseur_admin:index' %}">
+        🌱 Espace Fournisseur - La Providence
+    </a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'fournisseur/css/fournisseur_admin.css' %}">
+<style>
+    /* Styles inline pour une meilleure personnalisation */
+    #header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    #site-name a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    #site-name a:hover {
+        color: #f0f0f0;
+    }
+
+    .module h2, .module caption, .inline-group h2 {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    a:link, a:visited {
+        color: #764ba2;
+    }
+
+    .button, input[type=submit], input[type=button], .submit-row input, button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: opacity 0.3s;
+    }
+
+    .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, button:hover {
+        opacity: 0.9;
+    }
+
+    .breadcrumbs {
+        background: #f5f5f5;
+        color: #333;
+    }
+
+    .breadcrumbs a {
+        color: #764ba2;
+    }
+</style>
+{% endblock %}
+
+{% block userlinks %}
+{% if user.is_active and user.is_staff %}
+    <div style="color: white; padding: 10px;">
+        👤 <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+        {% if user.fournisseur %}
+        <br><small style="opacity: 0.9;">{{ user.fournisseur.metier }}</small>
+        {% endif %}
+    </div>
+    {{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+<div id="footer" style="text-align: center; padding: 20px; background: #f5f5f5; color: #666; margin-top: 40px;">
+    <p>
+        🌱 <strong>Espace Fournisseur - La Providence</strong>
+    </p>
+    <p style="font-size: 12px; margin-top: 10px;">
+        Pour toute question, contactez l'administrateur
+    </p>
+</div>
+{% endblock %}

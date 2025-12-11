@@ -1,0 +1,51 @@
+import os
+import django
+from datetime import datetime
+
+# Assurez-vous que Django est configuré
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'back.settings')
+django.setup()
+
+from produits.models import Produit, Categorie, Fournisseur
+
+# Fonction pour insérer des données dans la base de données
+def inserer_donnees():
+    try:
+        # Récupérer une catégorie et un fournisseur existants
+        categorie = Categorie.objects.get(id=119)  # Remplacez 119 par un id valide
+        fournisseur = Fournisseur.objects.get(id=1)  # Remplacez 1 par un id valide
+        
+        # Insérer un produit
+        produit = Produit.objects.create(
+            id='1',  # L'id unique de votre produit
+            nom='Huile de noix',
+            description='Huile de noix vierge extra, idéale pour les salades.',
+            description_longue="Découvrez le goût authentique de la noix dans cette huile...",
+            prix=70.00,
+            stock=1689,
+            image='produits/Huiledenoix-16110ed7/bouteille-50-cl-huile-noix-traditionnelle-1200.jpg',
+            grande_image='produits/Huiledenoix-16110ed7/champs-de-noyers-drome-506671_1080x675.jpg',
+            date_ajoute=datetime.now(),
+            date_modifie=datetime.now(),
+            qr_code='produits/Huiledenoix-16110ed7/qrcode.png',
+            numero_unique='16110ed7',
+            adresse_produit=None,
+            lat=None,
+            long=None,
+            categorie=categorie,  # Associer la catégorie
+            souscategorie=None,
+            poids=0.70,
+            fournisseur=fournisseur  # Associer le fournisseur
+        )
+        
+        print("Produit inséré avec succès!")
+    
+    except Categorie.DoesNotExist:
+        print("Catégorie introuvable!")
+    except Fournisseur.DoesNotExist:
+        print("Fournisseur introuvable!")
+    except Exception as e:
+        print(f"Erreur: {e}")
+
+if __name__ == "__main__":
+    inserer_donnees()

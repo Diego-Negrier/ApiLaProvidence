@@ -1,0 +1,156 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}Mes Commandes - La Providence{% endblock %}
+
+{% block content %}
+<div class="fournisseur-espace">
+    {% include 'fournisseur/includes/nav.html' %}
+
+    <div class="espace-container">
+        <div class="page-header">
+            <h1><i class="fas fa-shopping-cart"></i> Mes Commandes</h1>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Statistiques des commandes -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>{{ total_commandes }}</h3>
+                    <p>Total commandes</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>{{ commandes_en_attente }}</h3>
+                    <p>En attente</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>{{ commandes_livrees }}</h3>
+                    <p>Livrées</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtres -->
+        <div class="filters-card">
+            <form method="get" class="filters-form">
+                <div class="filter-group">
+                    <select name="statut" class="form-control">
+                        <option value="">Tous les statuts</option>
+                        <option value="en_attente" {% if request.GET.statut == 'en_attente' %}selected{% endif %}>En attente</option>
+                        <option value="confirmee" {% if request.GET.statut == 'confirmee' %}selected{% endif %}>Confirmée</option>
+                        <option value="en_preparation" {% if request.GET.statut == 'en_preparation' %}selected{% endif %}>En préparation</option>
+                        <option value="livree" {% if request.GET.statut == 'livree' %}selected{% endif %}>Livrée</option>
+                        <option value="annulee" {% if request.GET.statut == 'annulee' %}selected{% endif %}>Annulée</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-filter">
+                    <i class="fas fa-filter"></i> Filtrer
+                </button>
+            </form>
+        </div>
+
+        <!-- Liste des commandes -->
+        {% if commandes %}
+        <div class="commandes-liste">
+            {% for commande in commandes %}
+            <div class="commande-card">
+                <div class="commande-header">
+                    <div class="commande-numero">
+                        <h3><i class="fas fa-hashtag"></i> Commande {{ commande.numero_commande }}</h3>
+                        <span class="commande-date">{{ commande.date_commande|date:"d/m/Y à H:i" }}</span>
+                    </div>
+                    <span class="badge-statut badge-{{ commande.statut }}">
+                        {{ commande.get_statut_display }}
+                    </span>
+                </div>
+
+                <div class="commande-body">
+                    <div class="client-info">
+                        <h4><i class="fas fa-user"></i> Client</h4>
+                        {% if commande.client %}
+                        <p><strong>{{ commande.client.first_name }} {{ commande.client.last_name }}</strong></p>
+                        <p>{{ commande.client.email }}</p>
+                        {% else %}
+                        <p>Client non disponible</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="livraison-info">
+                        <h4><i class="fas fa-truck"></i> Livraison</h4>
+                        {% if commande.livreur %}
+                        <p><strong>Livreur:</strong> {{ commande.livreur.nom }}</p>
+                        {% endif %}
+                        {% if commande.point_relais %}
+                        <p><strong>Point relais:</strong> {{ commande.point_relais.nom }}</p>
+                        {% endif %}
+                        {% if not commande.livreur and not commande.point_relais %}
+                        <p>Non assigné</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="montant-info">
+                        <h4><i class="fas fa-euro-sign"></i> Montant</h4>
+                        <div class="montant-details">
+                            <div class="montant-row total">
+                                <span>Total</span>
+                                <span>{{ commande.total|floatformat:2 }}€</span>
+                            </div>
+                            <div class="montant-row">
+                                <span>Avancement</span>
+                                <span>{{ commande.avancement|floatformat:0 }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="commande-produits">
+                    <h4><i class="fas fa-boxes"></i> Mes produits ({{ commande.mes_lignes.count }})</h4>
+                    <div class="produits-liste">
+                        {% for ligne in commande.mes_lignes %}
+                        <div class="produit-ligne">
+                            <span class="produit-nom">{{ ligne.produit.nom }}</span>
+                            <span class="produit-quantite">x{{ ligne.quantite }}</span>
+                            <span class="produit-prix">{{ ligne.prix_unitaire|floatformat:2 }}€</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h2>Aucune commande</h2>
+            <p>Vous n'avez pas encore reçu de commandes</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

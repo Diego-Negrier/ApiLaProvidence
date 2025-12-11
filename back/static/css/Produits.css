@@ -1,0 +1,127 @@
+.container-catalogue{
+
+position: relative;
+margin:  auto;
+justify-content: center;
+align-items: center;
+padding: 10px;
+margin: 10px;
+background-color: var(--background-second);
+
+}
+#productsListe{
+    background-color: var(--background-second);
+    display:none;
+
+}
+.current-image{
+
+        flex: 1 1 100px; /* L'image occupe une largeur flexible mais minimale */
+        max-width: 100%; /* Limite la taille de l'image */
+        flex-shrink: 0; /* Evite que l'image rétrécisse */
+    }
+.logos-container {
+    display: flex;
+    flex-wrap: wrap; /* Permet de gérer l'overflow des logos si l'espace est trop petit */
+    justify-content: center;
+}
+
+.logo-checkbox {
+    display: flex;
+    align-items: center; /* Aligne verticalement le logo et le checkbox */
+    margin-right: 15px; /* Ajoute un espacement entre chaque logo/checkbox */
+    margin-bottom: 10px; /* Espacement vertical entre les groupes de logos */
+    justify-content: center;
+}
+.produit-image{
+    object-fit: cover;
+    width: 200px;;
+    height:auto;
+    display: flex;
+
+
+}
+.produit-image{
+    flex: 1 1 100px; /* L'image occupe une largeur flexible mais minimale */
+    max-width: 100%; /* Limite la taille de l'image */
+    flex-shrink: 0; /* Evite que l'image rétrécisse */
+}
+.produit-image-container img{
+    flex: 1 1 100px; 
+    height: 400px;
+    object-fit: cover; /* L'image garde son aspect tout en remplissant l'espace sans déformation */
+    border-radius: 8px; /* Arrondi des coins de l'image */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.logo-checkbox input {
+    margin-right: 10px; /* Espacement entre le checkbox et le logo */
+}
+
+.logo-checkbox img {
+    max-width: 100px;  /* Limite la taille maximale de l'image du logo */
+    max-height: 100px;
+}
+
+.produit-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(100% - 20px); /* Chaque produit occupe toute la largeur de l'écran sur mobile */
+    margin-bottom: 20px;
+    display: flex; /* Pour aligner l'image et le contenu */
+    gap: 20px; /* Espacement entre l'image et le contenu */
+    background-color: var(--background-second-leger);
+} 
+.produit-details{
+    font-size: 1.5rem;
+}
+@media screen and (max-width: 1450px) {
+    #productsListe{
+       display: block;
+    
+    }
+    .produit-card:hover {
+        transform: scale(1.02);
+    }
+
+    /* Conteneur des images */
+    .catalogue-size-image {
+        display: flex;
+        flex-direction: column; /* Place les images sur une seule ligne */
+        justify-content: flex-start; /* Aligne les images à gauche */
+        align-items: center; /* Centre verticalement les images */
+        gap: 10px; /* Ajoute un espacement entre les images */
+        margin-bottom: 20px;
+        width:100%;
+    }
+
+    /* Ajuster la largeur des images */
+    .produit-images-catalogue,
+    .produit-qr,
+    .produit-grande-image {
+        width: 50px;  /* Réduit la largeur des images à 100px */
+        height: 50px;  /* Définit une hauteur fixe pour toutes les images */
+        object-fit: cover;  /* Assure un bon recadrage des images */
+        border-radius: 8px;  /* Arrondir les coins des images */
+        border: 1px solid #ddd; /* Ajoute une bordure légère */
+    }
+
+    /* Détails du produit */
+    .produit-details {
+        padding: 10px;
+        width:100%;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+    /* Ajustement des détails */
+    .produit-details h3 {
+        font-size: 1em;
+        margin-bottom: 10px;
+    }
+
+    .produit-details p {
+        margin: 5px 0;
+        font-size: 0.7em;
+    }
+
+}

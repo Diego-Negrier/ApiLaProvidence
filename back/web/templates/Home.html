@@ -1,0 +1,1415 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="home-luxury">
+
+    {% if user.is_authenticated %}
+        {% if user.is_superuser %}
+            <!-- ========================================
+                 DASHBOARD ADMINISTRATEUR
+            ======================================== -->
+            <section class="admin-dashboard">
+                <div class="dashboard-container">
+                    <div class="dashboard-header">
+                        <div class="header-content">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <h1>Tableau de Bord Administrateur</h1>
+                                <p>Bienvenue {{ user.username }} - Gestion globale de La Providence</p>
+                            </div>
+                        </div>
+                        <a href="/admin/" class="btn-admin-panel">
+                            <i class="fas fa-cog"></i>
+                            <span>Accéder au Panel Admin</span>
+                        </a>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>{{ stats.total_produits }}</h3>
+                                <p>Produits Total</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>{{ stats.total_fournisseurs }}</h3>
+                                <p>Fournisseurs Actifs</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>{{ nb_commandes_total|default:"0" }}</h3>
+                                <p>Commandes Totales</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>{{ stats.total_categories }}</h3>
+                                <p>Catégories</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h2><i class="fas fa-bolt"></i> Actions Rapides</h2>
+                        <div class="actions-grid">
+                            <a href="/admin/produits/produit/add/" class="action-card">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Ajouter un Produit</span>
+                            </a>
+                            <a href="/admin/fournisseur/fournisseur/" class="action-card">
+                                <i class="fas fa-users"></i>
+                                <span>Gérer les Fournisseurs</span>
+                            </a>
+                            <a href="/admin/commandes/commande/" class="action-card">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span>Voir les Commandes</span>
+                            </a>
+                            <a href="/admin/categories/categorie/" class="action-card">
+                                <i class="fas fa-tags"></i>
+                                <span>Gérer les Catégories</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        {% elif user.username|slice:":12" == "fournisseur_" %}
+            <!-- ========================================
+                 DASHBOARD FOURNISSEUR
+            ======================================== -->
+            <section class="fournisseur-dashboard">
+                <div class="dashboard-container">
+                    <div class="dashboard-header fournisseur">
+                        <div class="header-content">
+                            <i class="fas fa-tractor"></i>
+                            <div>
+                                <h1>Votre Espace Fournisseur</h1>
+                                {% if user.fournisseur %}
+                                <p>Bienvenue {{ user.fournisseur.prenom }} {{ user.fournisseur.nom }} - {{ user.fournisseur.metier }}</p>
+                                {% else %}
+                                <p>Bienvenue {{ user.username }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <a href="{% url 'fournisseur:dashboard' %}" class="btn-fournisseur-panel">
+                            <i class="fas fa-store"></i>
+                            <span>Mon Espace Pro</span>
+                        </a>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>{{ nb_produits|default:"0" }}</h3>
+                                <p>Mes Produits</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>{{ nb_commandes|default:"0" }}</h3>
+                                <p>Commandes en Cours</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>{{ nb_produits_actifs|default:"0" }}</h3>
+                                <p>Produits Actifs</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>{{ note_moyenne|default:"N/A" }}</h3>
+                                <p>Note Moyenne</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h2><i class="fas fa-bolt"></i> Actions Rapides</h2>
+                        <div class="actions-grid">
+                            <a href="{% url 'fournisseur:produit_ajouter' %}" class="action-card">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Ajouter un Produit</span>
+                            </a>
+                            <a href="{% url 'fournisseur:produits' %}" class="action-card">
+                                <i class="fas fa-boxes"></i>
+                                <span>Mes Produits</span>
+                            </a>
+                            <a href="{% url 'fournisseur:commandes' %}" class="action-card">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span>Mes Commandes</span>
+                            </a>
+                            <a href="{% url 'fournisseur:profil' %}" class="action-card">
+                                <i class="fas fa-user-edit"></i>
+                                <span>Mon Profil</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    {% if user.fournisseur %}
+                    <div class="profile-summary">
+                        <h2><i class="fas fa-user"></i> Informations du Profil</h2>
+                        <div class="profile-grid">
+                            <div class="profile-item">
+                                <strong>Email:</strong>
+                                <span>{{ user.fournisseur.email }}</span>
+                            </div>
+                            <div class="profile-item">
+                                <strong>Téléphone:</strong>
+                                <span>{{ user.fournisseur.telephone|default:"Non renseigné" }}</span>
+                            </div>
+                            <div class="profile-item">
+                                <strong>Adresse:</strong>
+                                <span>{{ user.fournisseur.adresse|default:"Non renseignée" }}</span>
+                            </div>
+                            <div class="profile-item">
+                                <strong>Ville:</strong>
+                                <span>{{ user.fournisseur.ville|default:"Non renseignée" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
+        {% endif %}
+    {% endif %}
+
+    <!-- Hero Section avec Vidéo -->
+    <section class="hero-section">
+        <div class="video-background">
+            <video autoplay muted loop playsinline>
+                <source src="{% static 'image/HomeLaProvidence.mp4' %}" type="video/mp4">
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+
+        <div class="hero-content">
+            <h1 class="hero-title fade-in">La Providence</h1>
+            <p class="hero-subtitle fade-in" style="animation-delay: 0.3s">Du terroir à votre table</p>
+            <div class="hero-ornament fade-in" style="animation-delay: 0.6s">⚜</div>
+
+            <!-- Statistiques en temps réel -->
+            <div class="stats-row fade-in" style="animation-delay: 0.9s">
+                <div class="stat-item">
+                    <div class="stat-number">{{ stats.total_produits }}</div>
+                    <div class="stat-label">Produits</div>
+                </div>
+                <div class="stat-divider">◆</div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ stats.total_fournisseurs }}</div>
+                    <div class="stat-label">Producteurs</div>
+                </div>
+                <div class="stat-divider">◆</div>
+                <div class="stat-item">
+                    <div class="stat-number">{{ stats.total_categories }}</div>
+                    <div class="stat-label">Catégories</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Catégories Hiérarchiques -->
+    <section class="categories-section">
+        <div class="section-header">
+            <h2 class="section-title">Nos Produits du Terroir</h2>
+            <p class="section-subtitle">Découvrez nos catégories de produits locaux et artisanaux</p>
+        </div>
+
+        <div class="categories-grid">
+            {% for categorie in categories %}
+            <div class="category-card fade-in" style="animation-delay: {{ forloop.counter }}s">
+                <div class="category-header">
+                    {% if categorie.image %}
+                        <div class="category-image" style="background-image: url('{{ categorie.image.url }}');"></div>
+                    {% else %}
+                        <div class="category-icon">{{ categorie.icone|default:"📦" }}</div>
+                    {% endif %}
+                    <div class="category-overlay">
+                        <h3>{{ categorie.nom }}</h3>
+                        <p class="category-count">{{ categorie.nb_produits }} produit{{ categorie.nb_produits|pluralize }}</p>
+                    </div>
+                </div>
+
+                <div class="category-body">
+                    {% if categorie.souscategories.all %}
+                    <div class="subcategories">
+                        {% for sous_cat in categorie.souscategories.all|slice:":4" %}
+                        <a href="#" class="subcategory-tag">
+                            {{ sous_cat.icone|default:"📂" }} {{ sous_cat.nom }}
+                        </a>
+                        {% endfor %}
+                        {% if categorie.souscategories.all|length > 4 %}
+                        <span class="more-tag">+{{ categorie.souscategories.all|length|add:"-4" }}</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <button class="btn-category" onclick="window.location.href='/catalogue?cat={{ categorie.slug }}'">
+                        <span>Explorer</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            {% empty %}
+            <p class="no-data">Aucune catégorie disponible pour le moment.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Section Carte des Fournisseurs -->
+    <section class="map-section">
+        <div class="section-header">
+            <h2 class="section-title">Nos Producteurs Locaux</h2>
+            <p class="section-subtitle">Rencontrez les artisans de votre région</p>
+        </div>
+
+        <div class="map-container">
+            <!-- Carte interactive avec Leaflet -->
+            <div id="fournisseurs-map"></div>
+
+            <!-- Liste des fournisseurs à côté de la carte -->
+            <div class="fournisseurs-list">
+                <h3>Producteurs près de chez vous</h3>
+                <div class="fournisseurs-scroll">
+                    {% for fournisseur in fournisseurs %}
+                    <div class="fournisseur-card" data-lat="{{ fournisseur.latitude|default:'0' }}" data-lng="{{ fournisseur.longitude|default:'0' }}">
+                        <div class="fournisseur-avatar">
+                            {% if fournisseur.photo %}
+                            <img src="{{ fournisseur.photo.url }}" alt="{{ fournisseur.nom }}">
+                            {% else %}
+                            <div class="avatar-placeholder">{{ fournisseur.prenom.0 }}{{ fournisseur.nom.0 }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="fournisseur-info">
+                            <h4>{{ fournisseur.prenom }} {{ fournisseur.nom }}</h4>
+                            <p class="metier">{{ fournisseur.metier }}</p>
+                            <p class="location"><i class="fas fa-map-marker-alt"></i> {{ fournisseur.ville }}</p>
+                        </div>
+                        <button class="btn-voir" onclick="window.location.href='/fournisseur/{{ fournisseur.id }}'">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    {% empty %}
+                    <p class="no-data">Aucun producteur disponible.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Produits Nouveautés -->
+    {% if produits_nouveautes %}
+    <section class="products-section nouveautes">
+        <div class="section-header">
+            <h2 class="section-title">🆕 Dernières Nouveautés</h2>
+            <p class="section-subtitle">Découvrez nos produits fraîchement ajoutés</p>
+        </div>
+
+        <div class="products-carousel">
+            {% for produit in produits_nouveautes %}
+            <div class="product-card-mini">
+                {% if produit.image_principale %}
+                <img src="{{ produit.image_principale.url }}" alt="{{ produit.nom }}">
+                {% else %}
+                <div class="product-placeholder">📦</div>
+                {% endif %}
+                <div class="product-info">
+                    <h4>{{ produit.nom }}</h4>
+                    <p class="product-category">{{ produit.categorie.nom }}</p>
+                    <p class="product-price">{{ produit.prix_ttc|floatformat:2 }}€</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Section Promotions -->
+    {% if produits_promos %}
+    <section class="products-section promotions">
+        <div class="section-header">
+            <h2 class="section-title">🏷️ Promotions du Moment</h2>
+            <p class="section-subtitle">Profitez de nos offres exceptionnelles</p>
+        </div>
+
+        <div class="products-carousel">
+            {% for produit in produits_promos %}
+            <div class="product-card-mini promo">
+                <div class="promo-badge">-{{ produit.pourcentage_promotion|floatformat:0 }}%</div>
+                {% if produit.image_principale %}
+                <img src="{{ produit.image_principale.url }}" alt="{{ produit.nom }}">
+                {% else %}
+                <div class="product-placeholder">📦</div>
+                {% endif %}
+                <div class="product-info">
+                    <h4>{{ produit.nom }}</h4>
+                    <p class="product-category">{{ produit.categorie.nom }}</p>
+                    <p class="product-price">
+                        <span class="old-price">{{ produit.prix_ttc|floatformat:2 }}€</span>
+                        <span class="new-price">{{ produit.prix_promo_ttc|floatformat:2 }}€</span>
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Section Call to Action -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Rejoignez l'aventure La Providence</h2>
+            <p>Producteurs, consommateurs, ensemble valorisons nos terroirs</p>
+            <div class="cta-buttons">
+                <button class="btn-cta primary" onclick="window.location.href='/catalogue'">
+                    <i class="fas fa-shopping-basket"></i>
+                    <span>Découvrir les produits</span>
+                </button>
+                <button class="btn-cta secondary" onclick="window.location.href='/fournisseurs'">
+                    <i class="fas fa-handshake"></i>
+                    <span>Rencontrer les producteurs</span>
+                </button>
+            </div>
+            <div class="cta-ornament">⚜ ◆ ⚜</div>
+        </div>
+    </section>
+
+</div>
+
+<style>
+/* ========================================
+   VARIABLES & RESET
+======================================== */
+:root {
+    --color-gold: #c9a961;
+    --color-dark-gold: #a68840;
+    --color-deep-blue: #1e3a5f;
+    --color-cream: #f8f6f0;
+    --color-light-cream: #faf8f2;
+    --color-brown: #2c2416;
+}
+
+.home-luxury {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.05); opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease forwards;
+    opacity: 0;
+}
+
+/* ========================================
+   HERO SECTION
+======================================== */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+.video-background video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(50%) contrast(1.2);
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        rgba(30, 58, 95, 0.6) 0%,
+        rgba(44, 36, 22, 0.8) 100%
+    );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: var(--color-cream);
+}
+
+.hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    text-shadow:
+        3px 3px 6px rgba(0, 0, 0, 0.7),
+        0 0 40px rgba(201, 169, 97, 0.5);
+}
+
+.hero-subtitle {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-style: italic;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.hero-ornament {
+    font-size: 3rem;
+    color: var(--color-gold);
+    margin-bottom: 3rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--color-gold);
+    text-shadow: 0 0 20px rgba(201, 169, 97, 0.6);
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-cream);
+}
+
+.stat-divider {
+    font-size: 1.5rem;
+    color: var(--color-gold);
+    opacity: 0.5;
+}
+
+/* ========================================
+   SECTIONS COMMUNES
+======================================== */
+section {
+    padding: 5rem 2rem;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: var(--color-deep-blue);
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    font-style: italic;
+}
+
+/* ========================================
+   CATÉGORIES GRID
+======================================== */
+.categories-section {
+    background: linear-gradient(
+        180deg,
+        var(--color-light-cream) 0%,
+        #ffffff 100%
+    );
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.category-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    border: 3px solid transparent;
+}
+
+.category-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    border-color: var(--color-gold);
+}
+
+.category-header {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.category-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.4s ease;
+}
+
+.category-card:hover .category-image {
+    transform: scale(1.1);
+}
+
+.category-icon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+    background: linear-gradient(135deg, var(--color-deep-blue), var(--color-gold));
+}
+
+.category-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    color: white;
+}
+
+.category-overlay h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.category-count {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.category-body {
+    padding: 1.5rem;
+}
+
+.subcategories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    min-height: 60px;
+}
+
+.subcategory-tag {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: var(--color-light-cream);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--color-deep-blue);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.subcategory-tag:hover {
+    background: var(--color-gold);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.more-tag {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: var(--color-deep-blue);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.btn-category {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--color-deep-blue), var(--color-gold));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-category:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.btn-category i {
+    transition: transform 0.3s ease;
+}
+
+.btn-category:hover i {
+    transform: translateX(5px);
+}
+
+/* ========================================
+   CARTE FOURNISSEURS
+======================================== */
+.map-section {
+    background: var(--color-deep-blue);
+    color: white;
+}
+
+.map-section .section-title,
+.map-section .section-subtitle {
+    color: white;
+}
+
+.map-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+#fournisseurs-map {
+    height: 600px;
+    min-height: 400px;
+}
+
+.fournisseurs-list {
+    padding: 2rem;
+    background: var(--color-light-cream);
+}
+
+.fournisseurs-list h3 {
+    font-size: 1.5rem;
+    color: var(--color-deep-blue);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-gold);
+}
+
+.fournisseurs-scroll {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.fournisseur-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 15px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.fournisseur-card:hover {
+    transform: translateX(10px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.fournisseur-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.fournisseur-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-deep-blue), var(--color-gold));
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.fournisseur-info {
+    flex: 1;
+}
+
+.fournisseur-info h4 {
+    font-size: 1.1rem;
+    color: var(--color-deep-blue);
+    margin-bottom: 0.3rem;
+}
+
+.fournisseur-info .metier {
+    font-size: 0.9rem;
+    color: var(--color-gold);
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.fournisseur-info .location {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.btn-voir {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-gold);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-voir:hover {
+    background: var(--color-deep-blue);
+    transform: rotate(360deg);
+}
+
+/* ========================================
+   PRODUITS CAROUSEL
+======================================== */
+.products-section {
+    padding: 4rem 2rem;
+}
+
+.products-section.nouveautes {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+.products-section.promotions {
+    background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+}
+
+.products-carousel {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.product-card-mini {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.product-card-mini:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.product-card-mini img,
+.product-placeholder {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-light-cream);
+    font-size: 4rem;
+}
+
+.promo-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ef4444;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    z-index: 10;
+}
+
+.product-info {
+    padding: 1.5rem;
+}
+
+.product-info h4 {
+    font-size: 1.2rem;
+    color: var(--color-deep-blue);
+    margin-bottom: 0.5rem;
+}
+
+.product-category {
+    font-size: 0.9rem;
+    color: var(--color-gold);
+    margin-bottom: 0.5rem;
+}
+
+.product-price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-deep-blue);
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 1rem;
+    margin-right: 0.5rem;
+}
+
+.new-price {
+    color: #ef4444;
+}
+
+/* ========================================
+   CTA SECTION
+======================================== */
+.cta-section {
+    background: linear-gradient(
+        135deg,
+        var(--color-deep-blue) 0%,
+        var(--color-brown) 100%
+    );
+    color: white;
+    text-align: center;
+    padding: 6rem 2rem;
+}
+
+.cta-content h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    margin-bottom: 1rem;
+}
+
+.cta-content p {
+    font-size: 1.3rem;
+    margin-bottom: 3rem;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.btn-cta {
+    padding: 1.2rem 3rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.btn-cta.primary {
+    background: var(--color-gold);
+    color: white;
+    border-color: var(--color-gold);
+}
+
+.btn-cta.primary:hover {
+    background: white;
+    color: var(--color-gold);
+}
+
+.btn-cta.secondary {
+    background: transparent;
+    color: white;
+    border-color: white;
+}
+
+.btn-cta.secondary:hover {
+    background: white;
+    color: var(--color-deep-blue);
+}
+
+.cta-ornament {
+    font-size: 2rem;
+    color: var(--color-gold);
+    letter-spacing: 1.5rem;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 1024px) {
+    .map-container {
+        grid-template-columns: 1fr;
+    }
+
+    .fournisseurs-list {
+        order: -1;
+    }
+
+    .stats-row {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .categories-grid,
+    .products-carousel {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-row {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .stat-divider {
+        transform: rotate(90deg);
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-cta {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+}
+
+.no-data {
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+    font-style: italic;
+}
+
+/* ========================================
+   DASHBOARDS ADMIN & FOURNISSEUR
+======================================== */
+.admin-dashboard,
+.fournisseur-dashboard {
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+.fournisseur-dashboard {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.dashboard-header.fournisseur {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.header-content i {
+    font-size: 3rem;
+    color: var(--color-gold);
+}
+
+.dashboard-header.fournisseur .header-content i {
+    color: white;
+}
+
+.header-content h1 {
+    font-size: 2rem;
+    margin: 0;
+    color: var(--color-deep-blue);
+}
+
+.dashboard-header.fournisseur .header-content h1 {
+    color: white;
+}
+
+.header-content p {
+    margin: 0.5rem 0 0 0;
+    color: #666;
+}
+
+.dashboard-header.fournisseur .header-content p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-admin-panel,
+.btn-fournisseur-panel {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--color-deep-blue), var(--color-gold));
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-fournisseur-panel {
+    background: white;
+    color: #667eea;
+}
+
+.btn-admin-panel:hover,
+.btn-fournisseur-panel:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.stat-details h3 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0 0 0.3rem 0;
+    color: var(--color-deep-blue);
+}
+
+.stat-details p {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.quick-actions {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+}
+
+.quick-actions h2 {
+    font-size: 1.8rem;
+    color: var(--color-deep-blue);
+    margin: 0 0 2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.action-card {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--color-deep-blue);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    border: 2px solid transparent;
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(135deg, var(--color-gold), var(--color-deep-blue));
+    color: white;
+    border-color: var(--color-gold);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.action-card i {
+    font-size: 2.5rem;
+}
+
+.profile-summary {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.profile-summary h2 {
+    font-size: 1.8rem;
+    color: var(--color-deep-blue);
+    margin: 0 0 2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.profile-item {
+    background: var(--color-light-cream);
+    padding: 1.5rem;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.profile-item strong {
+    color: var(--color-deep-blue);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.profile-item span {
+    color: #333;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+
+    .header-content {
+        flex-direction: column;
+    }
+
+    .stats-grid,
+    .actions-grid,
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<!-- Leaflet pour la carte -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// Initialiser la carte Leaflet
+document.addEventListener('DOMContentLoaded', function() {
+    // Carte centrée sur la France
+    const map = L.map('fournisseurs-map').setView([46.603354, 1.888334], 6);
+
+    // Tuile de carte avec style vintage/luxe
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        maxZoom: 20
+    }).addTo(map);
+
+    // Icône personnalisée
+    const customIcon = L.divIcon({
+        className: 'custom-marker',
+        html: '<div style="background: linear-gradient(135deg, #1e3a5f, #c9a961); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"><i class="fas fa-tractor" style="color: white; font-size: 14px;"></i></div>',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+    });
+
+    // Ajouter des marqueurs pour chaque fournisseur
+    {% for fournisseur in fournisseurs %}
+        {% if fournisseur.latitude and fournisseur.longitude %}
+        L.marker([{{ fournisseur.latitude }}, {{ fournisseur.longitude }}], {icon: customIcon})
+            .addTo(map)
+            .bindPopup(`
+                <div style="text-align: center;">
+                    <h4 style="margin-bottom: 0.5rem;">{{ fournisseur.prenom }} {{ fournisseur.nom }}</h4>
+                    <p style="color: #c9a961; font-weight: 600;">{{ fournisseur.metier }}</p>
+                    <p style="font-size: 0.9rem;">{{ fournisseur.ville }}</p>
+                    <button onclick="window.location.href='/fournisseur/{{ fournisseur.id }}'" style="padding: 0.5rem 1rem; background: #1e3a5f; color: white; border: none; border-radius: 20px; cursor: pointer; margin-top: 0.5rem;">Voir le profil</button>
+                </div>
+            `);
+        {% endif %}
+    {% endfor %}
+
+    // Pour les fournisseurs sans coordonnées, les placer aléatoirement en France
+    {% for fournisseur in fournisseurs %}
+        {% if not fournisseur.latitude or not fournisseur.longitude %}
+        const randomLat = 46.603354 + (Math.random() - 0.5) * 10;
+        const randomLng = 1.888334 + (Math.random() - 0.5) * 10;
+        L.marker([randomLat, randomLng], {icon: customIcon})
+            .addTo(map)
+            .bindPopup(`
+                <div style="text-align: center;">
+                    <h4 style="margin-bottom: 0.5rem;">{{ fournisseur.prenom }} {{ fournisseur.nom }}</h4>
+                    <p style="color: #c9a961; font-weight: 600;">{{ fournisseur.metier }}</p>
+                    <p style="font-size: 0.9rem;">{{ fournisseur.ville }}</p>
+                    <button onclick="window.location.href='/fournisseur/{{ fournisseur.id }}'" style="padding: 0.5rem 1rem; background: #1e3a5f; color: white; border: none; border-radius: 20px; cursor: pointer; margin-top: 0.5rem;">Voir le profil</button>
+                </div>
+            `);
+        {% endif %}
+    {% endfor %}
+});
+
+// Survol des cartes fournisseurs pour centrer la carte
+document.querySelectorAll('.fournisseur-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        const lat = this.dataset.lat;
+        const lng = this.dataset.lng;
+        if (lat && lng && lat != '0' && lng != '0') {
+            // map.setView([lat, lng], 10); // Optionnel: centrer la carte
+        }
+    });
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}Tableau de Bord - {{ fournisseur.nom }} - La Providence{% endblock %}
+
+{% block content %}
+<div class="fournisseur-espace">
+    <!-- Navigation Fournisseur -->
+    {% include 'fournisseur/includes/nav.html' %}
+
+    <div class="espace-container">
+        <div class="dashboard-welcome">
+            <div class="welcome-content">
+                <h1>Bienvenue {{ fournisseur.prenom }} {{ fournisseur.nom }}</h1>
+                <p><i class="fas fa-briefcase"></i> {{ fournisseur.metier }}</p>
+            </div>
+            <div class="welcome-actions">
+                <a href="{% url 'fournisseur:produit_ajouter' %}" class="btn-primary">
+                    <i class="fas fa-plus-circle"></i>
+                    Ajouter un produit
+                </a>
+            </div>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Statistiques -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>{{ nb_produits }}</h3>
+                    <p>Produits Total</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>{{ nb_produits_actifs }}</h3>
+                    <p>Produits Actifs</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>{{ nb_commandes }}</h3>
+                    <p>Commandes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produits Récents -->
+        <div class="section-card">
+            <div class="section-header">
+                <h2><i class="fas fa-clock"></i> Produits Récents</h2>
+                <a href="{% url 'fournisseur:produits' %}" class="btn-link">Voir tous →</a>
+            </div>
+
+            {% if produits_recents %}
+            <div class="produits-liste">
+                {% for produit in produits_recents %}
+                <div class="produit-item">
+                    <div class="produit-image">
+                        {% if produit.image_principale %}
+                        <img src="{{ produit.image_principale.url }}" alt="{{ produit.nom }}">
+                        {% else %}
+                        <div class="produit-placeholder">
+                            <span>{{ produit.icone_produit|default:"📦" }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="produit-info">
+                        <h4>{{ produit.nom }}</h4>
+                        <p class="produit-numero">{{ produit.numero_unique }}</p>
+                        <p class="produit-prix">{{ produit.prix_ttc|floatformat:2 }}€ TTC</p>
+                    </div>
+                    <div class="produit-status">
+                        <span class="badge {% if produit.est_actif %}badge-success{% else %}badge-danger{% endif %}">
+                            {% if produit.est_actif %}Actif{% else %}Inactif{% endif %}
+                        </span>
+                    </div>
+                    <div class="produit-actions">
+                        <a href="{% url 'fournisseur:produit_modifier' produit.pk %}" class="btn-icon" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-box-open"></i>
+                <p>Aucun produit pour le moment</p>
+                <a href="{% url 'fournisseur:produit_ajouter' %}" class="btn-primary">
+                    <i class="fas fa-plus"></i> Ajouter votre premier produit
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Actions Rapides -->
+        <div class="quick-actions-grid">
+            <a href="{% url 'fournisseur:produits' %}" class="action-card">
+                <i class="fas fa-boxes"></i>
+                <h3>Mes Produits</h3>
+                <p>Gérer mes produits</p>
+            </a>
+
+            <a href="{% url 'fournisseur:commandes' %}" class="action-card">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Mes Commandes</h3>
+                <p>Voir les commandes</p>
+            </a>
+
+            <a href="{% url 'fournisseur:profil' %}" class="action-card">
+                <i class="fas fa-user-edit"></i>
+                <h3>Mon Profil</h3>
+                <p>Paramétrer mon compte</p>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

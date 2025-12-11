@@ -1,0 +1,228 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block Catalogue %} 
+<div class="container-catalogue">
+
+
+
+    <h1>Catalogue des Produits
+
+      
+    </h1>
+        {% if is_authenticated %}
+        {% if is_admin %}
+            <!-- Lien d'ajout de produit pour l'administrateur -->
+            <a href="{% url 'ajouter_produit' %}" class="add-product-btn" style="text-decoration:none">
+                <i class="fas fa-add" 
+                    style="font-size:12px; color:white; background-color:green; border-radius: 50%; padding:5px">
+                </i>
+            </a>
+        {% elif is_fournisseur %}
+            <!-- Lien d'ajout de produit pour le fournisseur -->
+            <a href="{% url 'ajouter_produit' %}" class="add-product-btn" style="text-decoration:none">
+                <i class="fas fa-add" 
+                    style="font-size:12px; color:white; background-color:green; border-radius: 50%; padding:5px">
+                </i>
+            </a>
+        {% endif %}
+    {% else %}
+        <!-- Message si l'utilisateur n'est pas connecté -->
+        <p>Vous devez être connecté pour ajouter un produit.</p>
+    {% endif %}
+        <span>Ajouter un Produit</span><br>
+    <input style="margin:15px"type="text" id="searchInput" onkeyup="filterTable()" placeholder="Rechercher dans la table...">
+
+
+        
+
+    <!-- Zone de recherche -->
+
+    <!-- Table des produits -->
+    <table id="productsTable" class="responsive-table">
+        <thead>
+            <tr>
+
+                <th style="width:8%; text-align:center; vertical-align:middle; cursor:pointer;" onclick="sortTable(1)">ID</th>
+                <th style="width:10%" onclick="sortTable(2)">Produit</th>
+                <th style="width:18%" onclick="sortTable(3)">Description</th>
+                <th style="width:5%" onclick="sortTable(4)">Prix</th>
+                <th style="width:5%"  onclick="sortTable(5)">Stock</th>
+                <th style="width:5%" onclick="sortTable(6)">Poids</th>
+                <th onclick="sortTable(7)">Image</th>
+           
+                <th style="width:9%" onclick="sortTable(8)">Catégorie</th>
+                <th style="width:9%" onclick="sortTable(9)">Sous-Catégorie</th>
+
+                <th onclick="sortTable(11)">Fournisseur</th>
+                <th >Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit in produits %}
+            <tr>
+
+                <td style="text-align:center">{{ produit.id }}<br>({{ produit.numero_unique }})<br> 
+                    <img src="{{ produit.qr_code }}" alt="QR Code" width="25px" height="25px" /></td>
+
+                <td>{{ produit.nom }}</td>
+                <td class="ColonneDescription">{{ produit.description }}</td>
+                <td>{{ produit.prix }}</td>
+                <td>{{ produit.stock }}</td>
+                <td>
+                    {% if produit.poids %}
+                        {{ produit.poids }}
+                    {% else %}
+                        Non spécifié
+                    {% endif %}
+                </td>     
+                <td>
+                <img src="{{ produit.image }}" alt="{{ produit.nom}}" width="50" height="50" /><br>
+                <img src="{{ produit.grande_image }}" alt="Grande Image" width="50" height="50" />
+            </td>
+                <!-- Inside the table row -->
+                <td>
+                    {% if produit.categorie %}
+                        {{ produit.categorie.nom }}
+                    {% else %}
+                        Aucune
+                    {% endif %}
+                </td>
+                <td>
+                    {% if produit.souscategorie %}
+                        {{ produit.souscategorie.nom }}
+                    {% else %}
+                        Aucune
+                    {% endif %}
+                </td>
+
+
+                <td>
+                    {% if produit.fournisseur %}
+                        {{ produit.fournisseur.nom }}
+                    {% else %}
+                        Inconnu
+                    {% endif %}
+                </td>
+                <td>
+                    {% if is_authenticated %}
+                    {% if is_admin %}
+                        <!-- Lien de modification pour l'administrateur -->
+                        <a href="{% url 'modifier_produit' produit.pk %}" style="text-decoration:none">
+                            <i class="fas fa-edit" 
+                                style="color:white; background-color:rgb(224, 172, 17); border-radius: 50%; padding:8px">
+                            </i> 
+                        </a>
+                        <!-- Lien de suppression pour l'administrateur -->
+                        <a href="#" style="text-decoration:none" onclick="return confirmerSuppression(event, {{ produit.pk }})">
+                            <i class="fas fa-trash" 
+                                style="color:white; background-color:rgb(129, 9, 9); border-radius: 50%; padding:8px">
+                            </i> 
+                        </a>
+                        <form id="delete-form-{{ produit.pk }}" method="post" action="{% url 'supprimer_produit' produit.pk %}" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                    {% elif is_fournisseur %}
+                        <!-- Lien de modification pour le fournisseur, seulement s'il possède le produit -->
+                        {% if produit.fournisseur.user == user %}
+                            <a href="{% url 'modifier_produit' produit.pk %}" style="text-decoration:none">
+                                <i class="fas fa-edit" 
+                                    style="color:white; background-color:rgb(224, 172, 17); border-radius: 50%; padding:8px">
+                                </i> 
+                            </a>
+                        {% endif %}
+                        <!-- Lien de suppression pour le fournisseur, seulement s'il possède le produit -->
+                        {% if produit.fournisseur.user == user %}
+                            <a href="#" style="text-decoration:none" onclick="return confirmerSuppression(event, {{ produit.pk }})">
+                                <i class="fas fa-trash" 
+                                    style="color:white; background-color:rgb(129, 9, 9); border-radius: 50%; padding:8px">
+                                </i> 
+                            </a>
+                            <form id="delete-form-{{ produit.pk }}" method="post" action="{% url 'supprimer_produit' produit.pk %}" style="display: none;">
+                                {% csrf_token %}
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    <!-- Message si l'utilisateur n'est pas connecté -->
+                    <p>Vous devez être connecté pour voir ou modifier des produits.</p>
+                {% endif %}
+                </td>
+                            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="productsListe">
+        {% for produit in produits %}
+        <div class="produit-card" data-produit-name="{{ produit.nom|lower }}">
+            <div class="produit-cart-image">
+                <div class="catalogue-size-image">
+                    <img src="{{ produit.image }}" alt="{{ produit.image}}" class="produit-images-catalogue" /><br>
+                    <img src="{{ produit.qr_code }}" alt="QR Code" class="produit-qr" /><br>
+                    <img src="{{ produit.grande_image }}" alt="Grande Image" class="produit-grande-image" /><br>
+                </div>
+                {% if is_authenticated %}
+                {% if is_admin %}
+                    <!-- Lien de modification pour l'administrateur -->
+                    <a href="{% url 'modifier_produit' produit.pk %}" style="text-decoration:none">
+                        <i class="fas fa-edit" 
+                            style="color:white; background-color:rgb(224, 172, 17); border-radius: 50%; padding:8px">
+                        </i> 
+                    </a>
+                    <!-- Lien de suppression pour l'administrateur -->
+                    <a href="#" style="text-decoration:none" onclick="return confirmerSuppression(event, {{ produit.pk }})">
+                        <i class="fas fa-trash" 
+                            style="color:white; background-color:rgb(129, 9, 9); border-radius: 50%; padding:8px">
+                        </i> 
+                    </a>
+                    <form id="delete-form-{{ produit.pk }}" method="post" action="{% url 'supprimer_produit' produit.pk %}" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                {% elif is_fournisseur %}
+                    <!-- Lien de modification pour le fournisseur, seulement s'il possède le produit -->
+                    {% if produit.fournisseur.user == user %}
+                        <a href="{% url 'modifier_produit' produit.pk %}" style="text-decoration:none">
+                            <i class="fas fa-edit" 
+                                style="color:white; background-color:rgb(224, 172, 17); border-radius: 50%; padding:8px">
+                            </i> 
+                        </a>
+                    {% endif %}
+                    <!-- Lien de suppression pour le fournisseur, seulement s'il possède le produit -->
+                    {% if produit.fournisseur.user == user %}
+                        <a href="#" style="text-decoration:none" onclick="return confirmerSuppression(event, {{ produit.pk }})">
+                            <i class="fas fa-trash" 
+                                style="color:white; background-color:rgb(129, 9, 9); border-radius: 50%; padding:8px">
+                            </i> 
+                        </a>
+                        <form id="delete-form-{{ produit.pk }}" method="post" action="{% url 'supprimer_produit' produit.pk %}" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <!-- Message si l'utilisateur n'est pas connecté -->
+                <p>Vous devez être connecté pour voir ou modifier des produits.</p>
+            {% endif %}
+            </div>
+            <div class="produit-details">
+                <h3>{{ produit.nom }}</h3>
+                <p><strong>ID:</strong> {{ produit.id }}</p>
+                <p><strong>Numéro unique:</strong> {{ produit.numero_unique }}</p>
+                <p><strong>Description:</strong> {{ produit.description }}</p>
+                <p><strong>Prix:</strong> {{ produit.prix }} €</p>
+                <p><strong>Stock:</strong> {{ produit.stock }}</p>
+                <p><strong>Poids:</strong> {% if produit.poids %}{{ produit.poids }}{% else %}Non spécifié{% endif %}</p>
+                <p><strong>Catégorie:</strong> {% if produit.categorie %}{{ produit.categorie.nom }}{% else %}Aucune{% endif %}</p>
+                <p><strong>Sous-catégorie:</strong> {% if produit.souscategorie %}{{ produit.souscategorie.nom }}{% else %}Aucune{% endif %}</p>
+                <p><strong>Fournisseur:</strong> {% if produit.fournisseur %}{{ produit.fournisseur.nom }}{% else %}Inconnu{% endif %}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+</div>
+
+
+{% endblock %} 

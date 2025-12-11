@@ -1,0 +1,118 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}Mes Produits - La Providence{% endblock %}
+
+{% block content %}
+<div class="fournisseur-espace">
+    {% include 'fournisseur/includes/nav.html' %}
+
+    <div class="espace-container">
+        <div class="page-header">
+            <h1><i class="fas fa-boxes"></i> Mes Produits</h1>
+            <a href="{% url 'fournisseur:produit_ajouter' %}" class="btn-primary">
+                <i class="fas fa-plus-circle"></i>
+                Ajouter un produit
+            </a>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Filtres et recherche -->
+        <div class="filters-card">
+            <form method="get" class="filters-form">
+                <div class="filter-group">
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Rechercher un produit..."
+                        value="{{ request.GET.search }}"
+                        class="form-control"
+                    >
+                </div>
+                <div class="filter-group">
+                    <select name="status" class="form-control">
+                        <option value="">Tous les statuts</option>
+                        <option value="actif" {% if request.GET.status == 'actif' %}selected{% endif %}>Actifs</option>
+                        <option value="inactif" {% if request.GET.status == 'inactif' %}selected{% endif %}>Inactifs</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-filter">
+                    <i class="fas fa-filter"></i> Filtrer
+                </button>
+            </form>
+        </div>
+
+        <!-- Liste des produits -->
+        {% if produits %}
+        <div class="produits-grid">
+            {% for produit in produits %}
+            <div class="produit-card">
+                <div class="produit-image-container">
+                    {% if produit.image_principale %}
+                    <img src="{{ produit.image_principale.url }}" alt="{{ produit.nom }}" class="produit-image">
+                    {% else %}
+                    <div class="produit-placeholder">
+                        <span>{{ produit.icone_produit|default:"📦" }}</span>
+                    </div>
+                    {% endif %}
+                    <span class="badge-status {% if produit.est_actif %}badge-success{% else %}badge-danger{% endif %}">
+                        {% if produit.est_actif %}Actif{% else %}Inactif{% endif %}
+                    </span>
+                </div>
+
+                <div class="produit-content">
+                    <h3>{{ produit.nom }}</h3>
+                    <p class="produit-numero">{{ produit.numero_unique }}</p>
+
+                    {% if produit.description %}
+                    <p class="produit-description">{{ produit.description|truncatewords:15 }}</p>
+                    {% endif %}
+
+                    <div class="produit-prix-info">
+                        <div class="prix-block">
+                            <span class="prix-label">Prix TTC</span>
+                            <span class="prix-value">{{ produit.prix_ttc|floatformat:2 }}€</span>
+                        </div>
+                        {% if produit.stock %}
+                        <div class="stock-block">
+                            <span class="stock-label">Stock</span>
+                            <span class="stock-value">{{ produit.stock }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="produit-actions">
+                        <a href="{% url 'fournisseur:produit_modifier' produit.pk %}" class="btn-action btn-edit">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                        <a href="{% url 'fournisseur:produit_supprimer' produit.pk %}" class="btn-action btn-delete">
+                            <i class="fas fa-trash"></i> Supprimer
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-box-open"></i>
+            <h2>Aucun produit trouvé</h2>
+            <p>Commencez par ajouter votre premier produit</p>
+            <a href="{% url 'fournisseur:produit_ajouter' %}" class="btn-primary">
+                <i class="fas fa-plus"></i> Ajouter un produit
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
