@@ -252,6 +252,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 
@@ -274,6 +275,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'web.context_processors.media_url' # ✅ Ajouter
 
             ],
 
@@ -352,8 +354,7 @@ else:
 # ✅ URL de base pour les médias - TOUJOURS pointer vers le NAS pour que les clients puissent y accéder
 # Cette URL sera utilisée pour construire les URLs complètes des images
 MEDIA_BASE_URL = os.getenv(
-    'MEDIA_BASE_URL',
-    'https://dataworlds.direct.quickconnect.to/public/LaProvidence/media/'
+        'MEDIA_BASE_URL','https://dataworlds.direct.quickconnect.to/public/LaProvidence/media/'
 )
 
 # ==========================================
